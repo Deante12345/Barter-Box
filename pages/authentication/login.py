@@ -4,6 +4,10 @@ class Login(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
 
+        # Create instance variables for username and password fields
+        self.username_field = ft.TextField(label="Username", width=300)
+        self.password_field = ft.TextField(label="Password", password=True, width=300)
+
         self.expand = True
 
         self.content = ft.Row(
@@ -36,8 +40,9 @@ class Login(ft.Container):
                             alignment=ft.MainAxisAlignment.CENTER,  # Center the form elements
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER,  # Center horizontally
                             controls=[
-                                ft.TextField(label="Username", width=300),
-                                ft.TextField(label="Password", password=True, width=300),
+                                self.username_field,
+                                self.password_field,
+                                ft.Container(height=20),  # Space between the inputs and button
                                 ft.ElevatedButton(text="Login", on_click=lambda e: page.go("/home")),
                             ],
                         ),
@@ -45,3 +50,10 @@ class Login(ft.Container):
                 ),
             ]
         )
+
+    # Method to handle the login action
+    def login_action(self, e):
+        # Grab the values of the username and password fields
+        username = self.username_field.value
+        password = self.password_field.value
+        print(f"Username: {username}, Password: {password}")  # Replace with actual login logic
