@@ -30,7 +30,7 @@ class Login(ft.Container):
                     ),
                 ),
                 ft.Container(
-                    bgcolor="#9dc8e0",  # Light blue background
+                   
                     expand=3,  # Adjust the width of the login container
                     content=ft.Container(
                         bgcolor="white",
