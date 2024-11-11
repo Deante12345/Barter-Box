@@ -1,8 +1,8 @@
 #main colors
 customPrimaryColor = "#DDBB30"
-customBgColor = "white"
+customBgColor = "black"
 customTextcolor = "#868E96"
-customTextcolor = "black"
+customTextcolor = "white"
 
 #sideBar
 #side bar
