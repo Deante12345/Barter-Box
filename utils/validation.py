@@ -3,8 +3,9 @@ class Validation:
     def __init__(self) -> None:
         pass
 
-    def is_valid_email (self, email):
-        pattern = "^[a-ZA-ZO-9_+-]+@[a-zA-Z0-9-1+\. [a-ZA-Z0-9-. ]+$"
+    def is_valid_email(self, email):
+        # Correct the pattern to avoid the 'a-Z' range error
+        pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
         return re.match(pattern, email) is not None
 
     def is_valid_password (self, password):
