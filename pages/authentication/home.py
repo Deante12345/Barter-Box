@@ -7,7 +7,7 @@ class Home(ft.Container):
         # Create the navigation bar
         self.navigation_bar = ft.Row(
             controls=[
-                ft.TextButton("Trade", on_click=lambda e: page.go("/login")),
+                ft.TextButton("Trade", on_click=lambda e: page.go("/userMakePost")),
                 ft.TextButton("Profile", on_click=lambda e: page.go("/profile")),
             ],
             alignment=ft.MainAxisAlignment.END,

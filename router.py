@@ -3,6 +3,9 @@ import flet as ft
 from pages.authentication.login import Login 
 from pages.authentication.signup import SignUp
 from pages.authentication.home import Home
+from pages.authentication.profile import Profile
+from pages.authentication.usermakepost import UserMakePost
+
 
 def views_handler (page):
     return {
@@ -15,4 +18,11 @@ def views_handler (page):
         "/home": ft.View( route="/home", controls=[
             Home(page)
         ]),
+         "/profile": ft.View( route="/profile", controls=[
+            Profile(page)
+        ]),
+        "/userMakePost": ft.View( route="/userMakePost", controls=[
+
+        ]),
+        
     }
