@@ -1,31 +1,26 @@
 import flet as ft
-from router import views_handler
-from pages.authentication.login import Login
-from pages.authentication.signup import SignUp
 
-def main (page: ft.Page):
-    page.bgcolor = "white"
-    page.padding=ft.padding.all(0)
-    def route_change (route) :
-        page.clean()
-        
-        if page.route == "/login":
-            page.add(Login(page))
-            
-        if page.route == "/signup":
-            page.add(SignUp(page))    
-        
-        page.fonts == {
-            "abeezee": "fonts/AbeeZee-Regular"
-        }
-        
-        page.on_route_change = route_change
-        
-        page.views.clear()
-        page.views.append(views_handler(page)[page.route])
-        page.update()
-    page.on_route_change = route_change
+class Home(ft.Container):
+    def __init__(self, page: ft.Page):
+        super().__init__()
 
-    page.go("/login")
+        # Create the navigation bar
+        self.navigation_bar = ft.Row(
+            controls=[
+                ft.TextButton("Trade", on_click=lambda e: page.go("/login")),
+                ft.TextButton("Profile", on_click=lambda e: page.go("/profile")),
+            ],
+            alignment=ft.MainAxisAlignment.END,
+            spacing=10,
+        )
 
-ft.app(target=main,assets_dir="assets")
+        # Main content of the Home page
+        self.content = ft.Column(
+            controls=[
+                self.navigation_bar,  # Add the navigation bar here
+                ft.Text("Hello Home page", color="white"),
+                ft.ElevatedButton(text="Sign Out", on_click=lambda e: page.go("/login")),
+            ]
+        )
+
+# Additional page classes like Login can be defined similarly
