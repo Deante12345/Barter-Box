@@ -28,5 +28,6 @@ class Profile(ft.Container):
                         ]
                     ),
                 ),
-            ]
+            ] 
         )
+
