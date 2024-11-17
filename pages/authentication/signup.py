@@ -126,3 +126,6 @@ class SignUp(ft.Container):
         # Debugging: Confirm the signup process
         print("This is our signup")
         print(f"First Name: {first_name}, Last Name: {last_name}, Email: {email}")
+
+
+
