@@ -1,88 +1,174 @@
 import flet as ft
 from datetime import datetime
-
+import datetime
 class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
-
+        
+        # Page reference and layout setup
+        self.page = page
+        self.expand = True
         self.images = []
-        self.image_container = self.create_image_container(page)
+        self.default_border = ft.border.all(width=1, color="#bdcbf4")
+        self.error_border = ft.border.all(width=1, color="red")
+        self.error_field = ft.Text(value="", color="red", size=0)
 
-        self.content = ft.Column(
-          controls=[
-            ft.Text("List Product/s for Barter", size=80, weight=ft.FontWeight.EXTRA_BOLD),
-
-        self.image_container,  
-            ft.TextField(label="Title of product", required=True),
-            ft.TextField(label="Description: why you don't want it, is it properly sealed? etc..", required=True, multiline=True),
-            ft.TextField(label="Quantity", required=True, width=100),
-            ft.TextField(label="Amount of points you want", required=True, width=90),
-            ft.TextField(label="Zip Code", required=True, width=100, max_length=5),
-            ft.Text("Expiration Date (must be after today):", size=20, weight=ft.FontWeight.REGULAR),
-            ft.DatePicker(label="Select Expiration Date", on_change=self.validate_expiration_date, required=True),  
-
-            ft.Container(
-                    content=ft.Icon(ft.icons.ADD_A_PHOTO),
-                    on_click=self.add_image_file,  
-                    width=100,
-                    height=100,
-                    bgcolor="#E0E0E2"
-                ),
-                
-            ft.ElevatedButton(
-                   text="POST",
-                   on_click=self.save_post_to_database,
-                   style=ft.ButtonStyle(text_color=ft.colors.WHITE, bgcolor=ft.colors.BLUE, font_weight=ft.FontWeight.EXTRA_BOLD)
-                )
-            ]
-         )
-
-    def validate_expiration_date(self, e):
-        selected_date = e.control.value  
-        if not selected_date:
-             e.control.error_text = "You must select an expiration date!"
-             e.control.update()
-             return  
-        current_date = datetime.today().date()  
-        if selected_date <= current_date:
-             e.control.error_text = "Expiration date must be after today!"
-             e.control.update()
-        else:
-             e.control.error_text = ""  
-             e.control.update()
-
-    def create_image_container(self, page: ft.Page):  
-        self.page = page  
-        return ft.Row(
-            controls=[
-            ft.Container(
-                content=ft.Icon(ft.icons.ADD_A_PHOTO),
-                on_click=lambda _: self.add_image_file(_),  
-                width=100,
-                height=100,
-                bgcolor="#E0E0E2",
-                border_radius=ft.BorderRadius.all(8),
-                )
-            ],
-            alignment=ft.MainAxisAlignment.START
+        # Input Fields
+        self.title_field = ft.TextField(label="Title of product", width=400)
+        self.description_field = ft.TextField(
+            label="Description (e.g., why you don't want it, is it sealed?)",
+          
+            multiline=True,
+            width=400,
+        )
+        self.quantity_field = ft.TextField(label="Quantity", width=100)
+        self.points_field = ft.TextField(label="Amount of points you want",  width=100)
+        self.zip_field = ft.TextField(label="Zip Code", max_length=5, width=150)
+        self.date_picker = ft.DatePicker(
+            first_date=datetime.date.today(),  # Start from today
+            last_date=datetime.date(year=2024, month=10, day=1),  # Restrict to a future date
+            on_change=self.validate_expiration_date,
         )
 
-    def add_image_file(self, e):
+        # Image Container
+        self.image_container = self.create_image_container()
+
+        # Layout
+        self.content = ft.Column(
+            controls=[
+                ft.Text("List Product/s for Barter", size=30, weight=ft.FontWeight.BOLD),
+                self.error_field,
+                self.title_field,
+                self.description_field,
+                self.quantity_field,
+                self.points_field,
+                self.zip_field,
+                ft.Text("Expiration Date (must be after today):", size=20),
+                self.date_picker,
+                self.image_container,
+                 ft.ElevatedButton(
+                    text="Experation Date",
+                    on_click=lambda e: self.date_picker,
+                    style=ft.ButtonStyle(
+                        
+                        bgcolor=ft.colors.BLUE,
+                        
+                    ),
+                ),
+                ft.ElevatedButton(
+                    text="Post",
+                    on_click=self.save_post,
+                    style=ft.ButtonStyle(
+                        
+                        bgcolor=ft.colors.BLUE,
+                        
+                    ),
+                ),
+               
+            ],
+        )
+
+    def create_image_container(self):
+        """Creates a container for uploading images."""
+        return ft.Row(
+            controls=[
+                ft.Container(
+                    content=ft.Icon(ft.icons.ADD_A_PHOTO),
+                    on_click=self.add_image,
+                    width=100,
+                    height=100,
+                    bgcolor="#E0E0E2",
+                    border_radius=ft.border_radius.all(8),
+                )
+            ],
+            alignment=ft.MainAxisAlignment.START,
+        )
+
+    def add_image(self, e):
+        """Handles adding an image to the container."""
         if len(self.images) < 4:
-            dialog = ft.FilePickerDialog(on_result=lambda e: self.process_image_upload(e))
+            dialog = ft.FilePicke(on_result=self.process_image_upload)
             self.page.dialog = dialog
             dialog.open()
 
     def process_image_upload(self, e: ft.FilePickerResultEvent):
+        """Processes the uploaded image."""
         if e.files:
             uploaded_image = ft.Image(src=e.files[0].path, fit=ft.ImageFit.COVER)
             self.images.append(uploaded_image)
             self.image_container.controls.append(uploaded_image)
             self.image_container.update()
 
-    
+    def validate_expiration_date(self, e):
+        """Validates that the expiration date is after the current date."""
+        selected_date = self.date_picker.value
+        if not selected_date or selected_date <= datetime.today().date():
+            self.error_field.value = "Expiration date must be after today!"
+            self.error_field.size = 12
+            self.error_field.update()
+        else:
+            self.error_field.value = ""
+            self.error_field.size = 0
+            self.error_field.update()
 
-    #def save_post_to_database(self, e):
-       #i think we need some sort of database for this 
-        
+    def save_post(self, e):
+        if not self.title_field.value.strip():
+            self.error_field.value = "Title is required!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return
 
+        if not self.description_field.value.strip():
+            self.error_field.value = "Description is required!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return
+
+        if not self.quantity_field.value.strip().isdigit():
+            self.error_field.value = "Quantity must be a valid number!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return
+
+        if not self.points_field.value.strip().isdigit():
+            self.error_field.value = "Points must be a valid number!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return
+
+        if not self.zip_field.value.strip().isdigit() or len(self.zip_field.value.strip()) != 5:
+            self.error_field.value = "Zip Code must be a 5-digit number!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return
+
+        if not self.date_picker.value:
+            self.error_field.value = "Expiration date is required!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return
+
+        # Process the valid data
+        print("Post saved successfully!")
+
+
+    def clear_fields(self):
+        """Clears all input fields."""
+        self.title_field.value = ""
+        self.description_field.value = ""
+        self.quantity_field.value = ""
+        self.points_field.value = ""
+        self.zip_field.value = ""
+        self.date_picker.value = None
+        self.image_container.controls = [
+            ft.Container(
+                content=ft.Icon(ft.icons.ADD_A_PHOTO),
+                on_click=self.add_image,
+                width=100,
+                height=100,
+                bgcolor="#E0E0E2",
+                border_radius=ft.BorderRadius.all(8),
+            )
+        ]
+        self.images = []
+        self.update()

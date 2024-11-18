@@ -21,8 +21,8 @@ def views_handler (page):
          "/profile": ft.View( route="/profile", controls=[
             Profile(page)
         ]),
-        "/userMakePost": ft.View( route="/userMakePost", controls=[
-
+        "/usermakepost": ft.View( route="/usermakepost", controls=[
+                UserMakePost(page)
         ]),
         
     }
