@@ -1,13 +1,24 @@
 import flet as ft
-# Points, Recent trades, Location, list of current items your trading, Ratings and reviews
-#edit prrofile
 
 class Profile(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
-        
+
+        # Navigation Bar
+        self.navigation_bar = ft.Row(
+            controls=[
+                ft.TextButton("Home", on_click=lambda e: page.go("/home"), icon=ft.icons.HOME),
+                ft.TextButton("Trade", on_click=lambda e: page.go("/trade"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
+                ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
+            ],
+            alignment=ft.MainAxisAlignment.END,
+            spacing=10,
+        )
+
+        # Profile Content
         self.content = ft.Column(
             controls=[
+                self.navigation_bar,
                 ft.Container(
                     alignment=ft.alignment.Alignment(1, -1),
                     padding=ft.padding.only(bottom=10),
@@ -26,10 +37,9 @@ class Profile(ft.Container):
                                 size=14,
                                 text_align="center",
                             ),
-                            ft.TextButton("Home", on_click=lambda e: page.go("/home")),
+                           
                         ]
                     ),
                 ),
-            ] 
+            ]
         )
-

@@ -5,14 +5,7 @@ class Home(ft.Container):
         super().__init__()
 
         # Navigation Bar
-        self.navigation_bar = ft.Row(
-            controls=[
-                ft.TextButton("Trade", on_click=lambda e: page.go("/trade")),
-                ft.TextButton("Profile", on_click=lambda e: page.go("/profile")),
-            ],
-            alignment=ft.MainAxisAlignment.END,
-            spacing=10,
-        )
+        
 
         # Welcome Banner
         self.welcome_banner = ft.Container(
@@ -26,6 +19,8 @@ class Home(ft.Container):
             alignment=ft.alignment.center,
             bgcolor="blue",
         )
+        
+        
 
         # Search Bar
         self.search_bar = ft.Container(
@@ -66,6 +61,15 @@ class Home(ft.Container):
     spacing=10,
     
         )
+        self.navigation_bar = ft.Row(
+                    controls=[
+                        ft.TextButton("Trade", on_click=lambda e: page.go("/trade"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
+                        ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
+                    ],
+                    alignment=ft.MainAxisAlignment.END,
+                    spacing=10,
+                )
+        
     
     # Main Content
         self.content = ft.Column(
@@ -76,6 +80,11 @@ class Home(ft.Container):
                 self.categories_section,
                 ft.Text("Recent Listings:", color="white"),
                 # Add other sections like featured items or recent listings here
+                
+               
             ],
             spacing=20,
+            
         )
+      
+        
