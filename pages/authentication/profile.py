@@ -1,4 +1,6 @@
 import flet as ft
+# Points, Recent trades, Location, list of current items your trading, Ratings and reviews
+#edit prrofile
 
 class Profile(ft.Container):
     def __init__(self, page: ft.Page):

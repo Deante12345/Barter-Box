@@ -25,7 +25,7 @@ class Login(ft.Container):
                                 size=40,
                                 weight=ft.FontWeight.BOLD,
                             ),
-                            ft.ElevatedButton(text="Go Back", on_click=lambda e: page.go("/signup")),
+                            ft.ElevatedButton(text="First Time User", on_click=lambda e: page.go("/signup")),
                         ],
                     ),
                 ),

@@ -8,7 +8,7 @@ from utils.validation import Validation
 class SignUp(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
-        
+
         self.page = page
         self.expand = True
         self.validation = Validation()
@@ -25,39 +25,52 @@ class SignUp(ft.Container):
         self.re_password_field = ft.TextField(label="Re-enter Password", password=True, width=300)
 
         # Set up the UI layout with fields and a signup button
-        self.content = ft.Column(
+        self.content = ft.Row(
             controls=[
-                ft.Text("Hello signUp", color="white"),
-
                 ft.Container(
                     bgcolor="#9dc8e0",  # Light blue background
                     expand=4,
-                    padding=ft.padding.all(100),
+                    padding=ft.padding.all(20),
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         controls=[
                             ft.Text(
-                                "Welcome!",
+                                "Barter Box",
                                 color="blue",
                                 size=40,
                                 weight=ft.FontWeight.BOLD,
                             ),
-                            self.error_field,
-                            self.first_name_field,
-                            self.last_name_field,
-                            self.email_field,
-                            self.username_field,
-                            self.password_field,
-                            self.re_password_field,
-                            # Call the signup method on button click
-                            ft.ElevatedButton(text="Sign Up", on_click=self.signup),
-                        ]
+                            ft.ElevatedButton(text="Already Have an Account", on_click=lambda e: page.go("/login")),
+                        ],
+                    ),
+                ),
+                ft.Container(
+                    expand=3,  # Adjust the width of the signup container
+                    content=ft.Container(
+                        bgcolor="white",
+                        border_radius=10,  # Rounded corners for the form
+                        padding=ft.padding.all(20),  # Padding inside the form
+                        content=ft.Column(
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,  # Center the fields
+                            controls=[
+                                self.first_name_field,
+                                self.last_name_field,
+                                self.email_field,
+                                self.username_field,
+                                self.password_field,
+                                self.re_password_field,
+                                ft.Container(height=20),  # Space between inputs and button
+                                ft.ElevatedButton(text="Sign Up", on_click=self.signup),
+                                self.error_field,  # Display error messages
+                            ],
+                        ),
                     ),
                 ),
             ]
         )
 
-    # Make sure this method is indented within the class
+    # Method to handle the signup action
     def signup(self, e):
         # Collect field values
         first_name = self.first_name_field.value
@@ -126,6 +139,3 @@ class SignUp(ft.Container):
         # Debugging: Confirm the signup process
         print("This is our signup")
         print(f"First Name: {first_name}, Last Name: {last_name}, Email: {email}")
-
-
-
