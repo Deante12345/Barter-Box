@@ -5,10 +5,10 @@ import db.config
 
 def get_connection():
      return psycopg2.connect(
-        host=config.DB_HOST,
-        port=config.DB_PORT,
-        dbname=config.DB_NAME,
-        user=config.DB_USER,
-        password=config.DB_PASSWORD,
+        host=db.config.DB_HOST,
+        port=db.config.DB_PORT,
+        dbname=db.config.DB_NAME,
+        user=db.config.DB_USER,
+        password=db.config.DB_PASSWORD,
         cursor_factory=RealDictCursor
      )
