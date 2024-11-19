@@ -63,9 +63,5 @@ class Profile(ft.Container):
                 
                  
             ]
-<<<<<<< HEAD
-        )
-=======
      
         )
->>>>>>> main
