@@ -63,9 +63,11 @@ class SignUp(ft.Container):
                                 ft.Container(height=20),  # Space between inputs and button
                                 ft.ElevatedButton(text="Sign Up", on_click=self.signup),
                                 self.error_field,  # Display error messages
+                                ft.Text("Password Requirements: 1 capital and 1 lowercase letter and 1 digit 0-9")
+
                             ],
                         ),
-                    ),
+                ),
                 ),
             ]
         )
@@ -96,7 +98,20 @@ class SignUp(ft.Container):
                 self.error_field.size = 0
                 self.error_field.update()
                 self.email_field.update()
-            
+
+            # Check for valid password
+            elif not valid_password(password):
+                self.password_field.border = self.error_border
+                self.error_field.value = "Invalid password"
+                self.error_field.size = 12
+                self.error_field.update()
+                self.password_field.update()
+                time.sleep(1)
+                self.password_field.border = self.default_border
+                self.error_field.size = 0
+                self.error_field.update()
+                self.password_field.update()
+
             # Check if passwords match
             elif password != re_password:
                 self.re_password_field.border = self.error_border
@@ -154,3 +169,9 @@ class SignUp(ft.Container):
         # Debugging: Confirm the signup process
         print("This is our signup")
         print(f"First Name: {first_name}, Last Name: {last_name}, Email: {email}")
+
+def valid_password(password):
+    uppercase_flag = password.lower() != password
+    lowercase_flag = password.upper() != password
+    contains_number = any(char.isdigit() for char in password)
+    return uppercase_flag and lowercase_flag and contains_number

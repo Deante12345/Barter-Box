@@ -2,6 +2,7 @@ import flet as ft
 from router import views_handler
 from pages.authentication.login import Login
 from pages.authentication.signup import SignUp
+from pages.authentication.usermakepost import UserMakePost
 
 def main (page: ft.Page):
     page.bgcolor = "white"
@@ -12,8 +13,11 @@ def main (page: ft.Page):
         if page.route == "/login":
             page.add(Login(page))
             
-        if page.route == "/signup":
+        if page.route == "/usermakepost":
             page.add(SignUp(page))    
+
+        if page.route == "/":
+            page.add(UserMakePost(page)) 
         
         page.fonts == {
             "abeezee": "fonts/AbeeZee-Regular"

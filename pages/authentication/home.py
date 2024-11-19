@@ -27,7 +27,7 @@ class Home(ft.Container):
                     icon=ft.icons.SHOPPING_CART, 
                     on_click=lambda e: page.update(self.shoppingCart)
                 ),
-                ft.TextButton("Trade", on_click=lambda e: page.go("/trade"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
+                ft.TextButton("Trade", on_click=lambda e: page.go("/usermakepost"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
                 ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
             ],
             alignment=ft.MainAxisAlignment.END,

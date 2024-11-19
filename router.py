@@ -4,14 +4,8 @@ from pages.authentication.login import Login
 from pages.authentication.signup import SignUp
 from pages.authentication.home import Home
 from pages.authentication.profile import Profile
-from utils.colors import (
-    customPrimaryColor,
-    customBgColor,
-    customTextcolor,
-    customBordercolor,
-    customSideBarIconColor,
-    custompashboardBG,
-)
+from pages.authentication.usermakepost import UserMakePost
+
 
 def views_handler (page):
     return {
@@ -27,4 +21,8 @@ def views_handler (page):
          "/profile": ft.View( route="/profile", controls=[
             Profile(page)
         ]),
+        "/usermakepost": ft.View( route="/usermakepost", controls=[
+                UserMakePost(page)
+        ]),
+        
     }
