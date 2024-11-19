@@ -1,16 +1,14 @@
 import time
 import flet as ft
-import psycopg2
-from psycopg2.errors import UniqueViolation
-from db.connection import get_connection
-from db.queries import create_user
+import sqlite3
+from db import db_path
 from pages.authentication.crud import check_data_exists, insert_data
 from utils.validation import Validation
 
 class SignUp(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
-        
+
         self.page = page
         self.expand = True
         self.validation = Validation()
@@ -27,39 +25,52 @@ class SignUp(ft.Container):
         self.re_password_field = ft.TextField(label="Re-enter Password", password=True, width=300)
 
         # Set up the UI layout with fields and a signup button
-        self.content = ft.Column(
+        self.content = ft.Row(
             controls=[
-                ft.Text("Hello signUp", color="white"),
-
                 ft.Container(
                     bgcolor="#9dc8e0",  # Light blue background
                     expand=4,
-                    padding=ft.padding.all(100),
+                    padding=ft.padding.all(20),
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         controls=[
                             ft.Text(
-                                "Welcome!",
+                                "Barter Box",
                                 color="blue",
                                 size=40,
                                 weight=ft.FontWeight.BOLD,
                             ),
-                            self.error_field,
-                            self.first_name_field,
-                            self.last_name_field,
-                            self.email_field,
-                            self.username_field,
-                            self.password_field,
-                            self.re_password_field,
-                            # Call the signup method on button click
-                            ft.ElevatedButton(text="Sign Up", on_click=lambda e: page.go("/signup")),
-                        ]
+                            ft.ElevatedButton(text="Already Have an Account", on_click=lambda e: page.go("/login")),
+                        ],
+                    ),
+                ),
+                ft.Container(
+                    expand=3,  # Adjust the width of the signup container
+                    content=ft.Container(
+                        bgcolor="white",
+                        border_radius=10,  # Rounded corners for the form
+                        padding=ft.padding.all(20),  # Padding inside the form
+                        content=ft.Column(
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,  # Center the fields
+                            controls=[
+                                self.first_name_field,
+                                self.last_name_field,
+                                self.email_field,
+                                self.username_field,
+                                self.password_field,
+                                self.re_password_field,
+                                ft.Container(height=20),  # Space between inputs and button
+                                ft.ElevatedButton(text="Sign Up", on_click=self.signup),
+                                self.error_field,  # Display error messages
+                            ],
+                        ),
                     ),
                 ),
             ]
         )
 
-    # Make sure this method is indented within the class
+    # Method to handle the signup action
     def signup(self, e):
         # Collect field values
         first_name = self.first_name_field.value
@@ -71,9 +82,8 @@ class SignUp(ft.Container):
 
         # Check if all fields are filled
         if first_name and last_name and email and username and password and re_password:
-            conn = get_connection()
-            cursor = conn.cursor()
-            
+            conn = sqlite3.connect(db_path)
+
             # Check for valid email
             if not self.validation.is_valid_email(email):
                 self.email_field.border = self.error_border
@@ -87,34 +97,35 @@ class SignUp(ft.Container):
                 self.error_field.update()
                 self.email_field.update()
 
-            else:
-                try:
-                    user_id = create_user(first_name, last_name, username, password, email)
             # Check if email already exists
-                    self.page.splash = ft.ProgressBar()
-                    self.error_field.value = "You have successfully been registered"
-                    self.error_field.color = "green"
-                    self.error_field.size = 12
-                    self.error_field.update()
-                    self.page.update()
-                    time.sleep(1)
-                    self.page.splash = None
-                    self.page.update()
-                    self.page.go("/login")
+            elif not check_data_exists(conn, "user", f"email='{email}'"):
+                # Insert the user data into the database
+                insert_data(conn, "user", (first_name, last_name, email, username, password))
 
-                except UniqueViolation:
-                    self.error_field.value = "Email or Username already exists"
-                    self.error_field.size = 12
-                    self.error_field.update()
-                    time.sleep(1)
-                    self.error_field.size = 0
-                    self.error_field.update()
+                # Show success message
+                self.page.splash = ft.ProgressBar()
+                self.error_field.value = "You have successfully been registered"
+                self.error_field.color = "green"
+                self.error_field.size = 12
+                self.error_field.update()
+                self.page.update()
+                time.sleep(1)
+                self.page.splash = None
+                self.page.update()
+                self.page.go("/login")
 
-                except Exception as ex:
-                    print(f"Database error: {ex}")
-                    self.error_field.value = "An error occurred. Please try again."
-                    self.error_field.size = 12
-                    self.error_field.update()
+            else:
+                # If email exists
+                self.email_field.border = self.error_border
+                self.error_field.value = "Email already exists"
+                self.error_field.size = 12
+                self.error_field.update()
+                self.email_field.update()
+                time.sleep(1)
+                self.email_field.border = self.default_border
+                self.error_field.size = 0
+                self.error_field.update()
+                self.email_field.update()
 
         else:
             # If any field is empty
@@ -125,6 +136,6 @@ class SignUp(ft.Container):
             self.error_field.size = 0
             self.error_field.update()
 
-    # Debugging: Confirm the signup process
+        # Debugging: Confirm the signup process
         print("This is our signup")
         print(f"First Name: {first_name}, Last Name: {last_name}, Email: {email}")
