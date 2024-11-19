@@ -19,13 +19,20 @@ class Login(ft.Container):
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         controls=[
+                            
+                            ft.Image(
+                                src="assets/Barter Box Trans.png",  # Path to your logo
+                                width=350,  # Adjust the width as needed
+                                height=350,  # Adjust the height as needed
+                               fit=ft.ImageFit.CONTAIN,  # Ensure the image maintains aspect ratio
+                            ),
                             ft.Text(
                                 "Barter Box",
                                 color="blue",
                                 size=40,
                                 weight=ft.FontWeight.BOLD,
                             ),
-                            ft.ElevatedButton(text="Signup", on_click=lambda e: page.go("/signup")),
+                            ft.ElevatedButton(text="Create New Account", on_click=lambda e: page.go("/signup")),
                         ],
                     ),
                 ),
@@ -56,4 +63,4 @@ class Login(ft.Container):
         # Grab the values of the username and password fields
         username = self.username_field.value
         password = self.password_field.value
-        print(f"Username: {username}, Password: {password}")  # Replace with actual login logic
+        print(f"Username: {username}, Password: {password}")  
