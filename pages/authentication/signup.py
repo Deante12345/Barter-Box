@@ -96,6 +96,21 @@ class SignUp(ft.Container):
                 self.error_field.size = 0
                 self.error_field.update()
                 self.email_field.update()
+            
+            # Check if passwords match
+            elif password != re_password:
+                self.re_password_field.border = self.error_border
+                self.error_field.value = "Passwords don't match"
+                self.error_field.size = 12
+                self.error_field.update()
+                self.re_password_field.update()
+                time.sleep(1)
+                self.re_password_field.border = self.default_border
+                self.error_field.size = 0
+                self.error_field.update()
+                self.re_password_field.update()
+            
+
 
             # Check if email already exists
             elif not check_data_exists(conn, "user", f"email='{email}'"):
