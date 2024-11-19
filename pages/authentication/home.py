@@ -22,10 +22,6 @@ class Home(ft.Container):
         # Navigation Bar
         self.navigation_bar = ft.Row(
             controls=[
-<<<<<<< HEAD
-                ft.TextButton("Trade", on_click=lambda e: page.go("/usermakepost")),
-                ft.TextButton("Profile", on_click=lambda e: page.go("/profile")),
-=======
                 ft.TextButton(
                     "Cart $0.00", 
                     icon=ft.icons.SHOPPING_CART, 
@@ -33,7 +29,6 @@ class Home(ft.Container):
                 ),
                 ft.TextButton("Trade", on_click=lambda e: page.go("/trade"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
                 ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
->>>>>>> main
             ],
             alignment=ft.MainAxisAlignment.END,
             spacing=10,
@@ -52,9 +47,6 @@ class Home(ft.Container):
             bgcolor="blue",
         )
 
-<<<<<<< HEAD
-# Additional page classes like Login can be defined similarly
-=======
         # Search Bar
         self.search_bar = ft.Container(
             content=ft.TextField(
@@ -104,4 +96,3 @@ class Home(ft.Container):
             ],
             spacing=20,
         )
->>>>>>> main
