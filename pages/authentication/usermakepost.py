@@ -6,6 +6,17 @@ class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
         
+        self.navigation_bar = ft.Row(
+            controls=[
+                
+                ft.TextButton("Home", on_click=lambda e: page.go("/home"), icon=ft.icons.HOME),
+                ft.TextButton("Trade", on_click=lambda e: page.go("/usermakepost"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
+                ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
+            ],
+            alignment=ft.MainAxisAlignment.END,
+            spacing=10,
+        )
+
         # Page reference and layout setup
         self.page = page
         self.expand = True
@@ -37,6 +48,7 @@ class UserMakePost(ft.Container):
         # Layout
         self.content = ft.Column(
             controls=[
+                self.navigation_bar,
                 ft.Text("List Product/s for Barter", size=30, weight=ft.FontWeight.BOLD),
                 self.error_field,
                 self.title_field,

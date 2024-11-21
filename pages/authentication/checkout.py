@@ -1,6 +1,6 @@
 import flet as ft
 
-class Profile(ft.Container):
+class Checkout(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
 
@@ -22,36 +22,16 @@ class Profile(ft.Container):
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.CircleAvatar(
-                                width=150,
-                                height=150,
-                                foreground_image_url="https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/4426348.png",
-                            ),
+                            
                             ft.Text(
-                                "Jaden Daniels", 
+                                "My Bag(0)", 
                                 size=20, 
                                 weight="bold", 
                                 text_align="center",
                             ),
-                            ft.Text(
-                                "Baton Rouge, Louisiana", 
-                                size=16, 
-                                color="blue", 
-                                text_align="center",
-                            ),
-                            ft.Text(
-                                "Hello, my name is Jaden, and I am happy to make any trades for groceries.\n"
-                                "I am a part-time chef, so I often have extra ingredients.",
-                                size=14,
-                                text_align="center",
-                            ),
+
                             ft.Text(
                                 "Total Points: ",
-                                size=14,
-                                text_align="center",
-                            ),
-                            ft.Text(
-                                "Rating: 7/10",
                                 size=14,
                                 text_align="center",
                             ),

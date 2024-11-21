@@ -5,6 +5,7 @@ from pages.authentication.signup import SignUp
 from pages.authentication.home import Home
 from pages.authentication.profile import Profile
 from pages.authentication.usermakepost import UserMakePost
+from pages.authentication.checkout import Checkout
 
 
 def views_handler (page):
@@ -23,6 +24,9 @@ def views_handler (page):
         ]),
         "/usermakepost": ft.View( route="/usermakepost", controls=[
                 UserMakePost(page)
+        ]),
+         "/checkout": ft.View( route="/checkout", controls=[
+                Checkout(page)
         ]),
         
     }
