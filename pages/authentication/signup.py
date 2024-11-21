@@ -5,6 +5,7 @@ from psycopg2.errors import UniqueViolation
 from db.connection import get_connection
 from db.queries import create_user
 from pages.authentication.crud import check_data_exists, insert_data
+from db.hash_password import hash_password
 from utils.validation import Validation
 
 class SignUp(ft.Container):
@@ -99,10 +100,24 @@ class SignUp(ft.Container):
                 self.error_field.size = 0
                 self.error_field.update()
                 self.email_field.update()
-
+            elif re_password != password:
+                self.re_password_field.border = self.error_border
+                self.error_field.value = "Passwords don't match"
+                self.error_field.size = 12
+                self.error_field.update()
+                self.re_password_field.update()
+                time.sleep(1)
+                self.re_password_field.border = self.default_border
+                self.error_field.size = 0
+                self.error_field.update()
+                self.re_password_field.update()
             else:
                 try:
-                    user_id = create_user(first_name, last_name, username, password, email)
+
+                    #hash password before inserting in database
+                    hashed_password = hash_password(password)
+
+                    user_id = create_user(first_name, last_name, username, hashed_password, email)
             # Check if email already exists
                     self.page.splash = ft.ProgressBar()
                     self.error_field.value = "You have successfully been registered"

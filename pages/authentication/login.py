@@ -1,4 +1,9 @@
 import flet as ft
+from psycopg2.errors import DatabaseError
+from db.queries import get_user_by_username
+from db.hash_password import verify_password
+import bcrypt
+
 
 class Login(ft.Container):
     def __init__(self, page: ft.Page):
@@ -7,6 +12,8 @@ class Login(ft.Container):
         # Create instance variables for username and password fields
         self.username_field = ft.TextField(label="Username", width=300)
         self.password_field = ft.TextField(label="Password", password=True, width=300)
+        self.error_field = ft.Text(value="", color="red", size=0)
+
 
         self.expand = True
 
@@ -49,8 +56,9 @@ class Login(ft.Container):
                             controls=[
                                 self.username_field,
                                 self.password_field,
+                                self.error_field,
                                 ft.Container(height=20),  # Space between the inputs and button
-                                ft.ElevatedButton(text="Login", on_click=lambda e: page.go("/home")),
+                                ft.ElevatedButton(text="Login", on_click=self.login_action),
                             ],
                         ),
                     ),
@@ -63,4 +71,32 @@ class Login(ft.Container):
         # Grab the values of the username and password fields
         username = self.username_field.value
         password = self.password_field.value
-        print(f"Username: {username}, Password: {password}")  
+
+        if not username or not password:
+            self.error_field.value = "Please Enter username and password"
+            self.error_field.update()
+            return
+
+        try:
+            user = get_user_by_username(username)
+            if not user:
+                self.error_field.value = "Invalid username or password"
+                self.error_field.update()
+                return
+
+            #verify password logic
+            user_id, db_username,hashed_password = user
+            hashed_password = user['password_hash']
+            print(f"Retrieved hash: '{hashed_password}'")
+            print(f"Length: {len(hashed_password)}")
+            if verify_password(password, hashed_password):
+                self.error_field.value = "Login successful!"
+                self.error_field.color = "green"
+                self.error_field.update()
+                self.page.go("/home")
+        except DatabaseError as ex:
+            print(f"Database error: {ex}")
+            self.error_field.value = "An error occurred. Please try again."
+            self.error_field.update()
+
+        #print(f"Username: {username}, Password: {password}")

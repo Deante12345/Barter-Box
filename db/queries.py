@@ -11,3 +11,12 @@ def create_user(first_name, last_name, username, password, email):
            cursor.execute(query, (first_name, last_name, username,
                                   password, email))
            return cursor.fetchone()["user_id"]
+
+def get_user_by_username(username):
+   query = """
+   SELECT user_id, username, password_hash FROM users WHERE username = %s;
+   """
+   with get_connection() as conn:
+      with conn.cursor() as cursor:
+         cursor.execute(query, (username,))
+         return cursor.fetchone()
