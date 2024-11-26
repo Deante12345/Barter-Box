@@ -1,14 +1,14 @@
 import flet as ft
 from datetime import datetime
 import datetime
+import re
 
 class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
-        
+
         self.navigation_bar = ft.Row(
             controls=[
-                
                 ft.TextButton("Home", on_click=lambda e: page.go("/home"), icon=ft.icons.HOME),
                 ft.TextButton("Trade", on_click=lambda e: page.go("/usermakepost"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
                 ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
@@ -29,17 +29,18 @@ class UserMakePost(ft.Container):
         self.title_field = ft.TextField(label="Title of product", width=400)
         self.description_field = ft.TextField(
             label="Description (e.g., why you don't want it, is it sealed?)",
-          
             multiline=True,
             width=400,
         )
         self.quantity_field = ft.TextField(label="Quantity", width=100)
-        self.points_field = ft.TextField(label="Amount of points you want",  width=100)
+        self.points_field = ft.TextField(label="Amount of points you want", width=200)
         self.zip_field = ft.TextField(label="Zip Code", max_length=5, width=150)
-        self.date_picker = ft.DatePicker(
-            first_date=datetime.date.today(),  # Start from today
-            last_date=datetime.date(year=2024, month=10, day=1),  # Restrict to a future date
-            on_change=self.validate_expiration_date,
+
+        
+        self.expiration_date_field = ft.TextField(
+            label="Expiration Date (MM/DD/YYYY)", 
+            width=400, 
+            max_length=10,  
         )
 
         # Image Container
@@ -56,35 +57,22 @@ class UserMakePost(ft.Container):
                 self.quantity_field,
                 self.points_field,
                 self.zip_field,
-                ft.Text("Expiration Date (must be after today):", size=20),
-                self.date_picker,
+                self.expiration_date_field,  # Add expiration date text field
                 self.image_container,
-                 ft.ElevatedButton(
-                    text="Experation Date",
-                    on_click=lambda e: self.date_picker,
-                    style=ft.ButtonStyle(
-                        
-                        bgcolor=ft.colors.BLUE,
-                        
-                    ),
-                ),
                 ft.ElevatedButton(
                     text="Post",
                     on_click=self.save_post,
                     style=ft.ButtonStyle(
-                        
                         bgcolor=ft.colors.BLUE,
-                        
                     ),
                 ),
-               
             ],
         )
 
     def create_image_container(self):
         """Creates a container for uploading images."""
         return ft.Row(
-            controls=[
+            controls=[ 
                 ft.Container(
                     content=ft.Icon(ft.icons.ADD_A_PHOTO),
                     on_click=self.add_image,
@@ -100,7 +88,7 @@ class UserMakePost(ft.Container):
     def add_image(self, e):
         """Handles adding an image to the container."""
         if len(self.images) < 4:
-            dialog = ft.FilePicke(on_result=self.process_image_upload)
+            dialog = ft.FilePicker(on_result=self.process_image_upload)
             self.page.dialog = dialog
             dialog.open()
 
@@ -112,17 +100,44 @@ class UserMakePost(ft.Container):
             self.image_container.controls.append(uploaded_image)
             self.image_container.update()
 
-    def validate_expiration_date(self, e):
-        """Validates that the expiration date is after the current date."""
-        selected_date = self.date_picker.value
-        if not selected_date or selected_date <= datetime.today().date():
-            self.error_field.value = "Expiration date must be after today!"
+    def validate_expiration_date(self):
+        """Validates that the expiration date is in the correct format and after today."""
+        date_str = self.expiration_date_field.value.strip()
+        
+        # Regular expression for validating MM/DD/YYYY format
+        date_pattern = re.compile(r"^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\d{4}$")
+        
+        if not date_str:
+            self.error_field.value = "Expiration date is required!"
             self.error_field.size = 12
             self.error_field.update()
-        else:
-            self.error_field.value = ""
-            self.error_field.size = 0
+            return False
+
+        if not date_pattern.match(date_str):
+            self.error_field.value = "Invalid date format! Use MM/DD/YYYY."
+            self.error_field.size = 12
             self.error_field.update()
+            return False
+
+        # Parse the date and check if it's after today's date
+        try:
+            expiration_date = datetime.datetime.strptime(date_str, "%m/%d/%Y").date()
+            if expiration_date <= datetime.date.today():
+                self.error_field.value = "Expiration date must be after today!"
+                self.error_field.size = 12
+                self.error_field.update()
+                return False
+        except ValueError:
+            self.error_field.value = "Invalid date value!"
+            self.error_field.size = 12
+            self.error_field.update()
+            return False
+
+        # If valid
+        self.error_field.value = ""
+        self.error_field.size = 0
+        self.error_field.update()
+        return True
 
     def save_post(self, e):
         if not self.title_field.value.strip():
@@ -155,15 +170,11 @@ class UserMakePost(ft.Container):
             self.error_field.update()
             return
 
-        if not self.date_picker.value:
-            self.error_field.value = "Expiration date is required!"
-            self.error_field.size = 12
-            self.error_field.update()
+        if not self.validate_expiration_date():
             return
 
         # Process the valid data
         print("Post saved successfully!")
-
 
     def clear_fields(self):
         """Clears all input fields."""
@@ -171,8 +182,8 @@ class UserMakePost(ft.Container):
         self.description_field.value = ""
         self.quantity_field.value = ""
         self.points_field.value = ""
-        self.zip_field.value = ""
-        self.date_picker.value = None
+        self.zipfield.value = ""
+        self.expiration_date_field.value = ""  # Clear expiration date text field
         self.image_container.controls = [
             ft.Container(
                 content=ft.Icon(ft.icons.ADD_A_PHOTO),
