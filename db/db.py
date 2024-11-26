@@ -1,53 +1,133 @@
-import sqlite3
-import os
-from db import db_path  # Ensure this path is defined in db.py
-db_path = "db.db"
+import psycopg2
+import config
 
-def table_exists(conn, table_name):
-    """Check if a specific table exists in the database."""
-    cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
-    return cursor.fetchone() is not None
+# Set up connection using imported credentials
+connection = psycopg2.connect(
+    host=config.DB_HOST,
+    port=config.DB_PORT,
+    dbname=config.DB_NAME,
+    user=config.DB_USER,
+    password=config.DB_PASSWORD
+)
 
-def create_database():
-    # Check if the database file exists or create it if it doesn’t
-    conn = sqlite3.connect(db_path)
-    
-    # Check if the "user" table exists
-    if not os.path.exists(db_path):
-        cursor = conn.cursor()
-        
-        # Create the "user" table if it doesn't exist
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS user (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                first_name TEXT NOT NULL,
-                last_name TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL
-            )
-            """
-        )
-        conn.commit()
-        conn.close
-        
-    elif not table_exists(conn, "user"):
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            """
-            CREATE TABLE user(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                first_name TEXT NOT NULL,
-                last_name TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL
-               
-            )
-             
-                """
-    
-        )
-        conn.commit
-        conn.close
+#database connection
+cursor = connection.cursor()
+
+
+#table creation
+create_queries = [
+"""
+  CREATE TYPE transaction_status AS ENUM ('Pending', 'Completed', 'Failed');
+"""
+    ,
+"""
+CREATE TABLE IF NOT EXISTS users(
+  user_id SERIAL PRIMARY KEY,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  points_balance INT DEFAULT 0,
+  date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+""",
+"""
+CREATE TABLE IF NOT EXISTS categories(
+  category_id SERIAL PRIMARY KEY,
+  category_name VARCHAR(255) NOT NULL,
+  description TEXT
+);
+""",
+"""
+CREATE TABLE IF NOT EXISTS items(
+  item_id SERIAL PRIMARY KEY,
+  trader_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  item_name VARCHAR(255),
+  description TEXT NOT NULL,
+  image_path TEXT NOT NULL,
+  points_value INT NOT NULL,
+  category_id INT REFERENCES categories(category_id) ON DELETE CASCADE,
+  date_listed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_featured BOOLEAN DEFAULT FALSE,
+  views_count INT DEFAULT 0 CHECK (views_count >= 0)
+);
+""",
+"""
+CREATE TABLE IF NOT EXISTS transactions(
+  transaction_id SERIAL PRIMARY KEY,
+  sender_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  receiver_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  item_id INT REFERENCES items(item_id) ON DELETE CASCADE,
+  points_transferred INT NOT NULL,
+  date_of_transaction TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status transaction_status NOT NULL
+);
+"""
+    ,
+"""
+CREATE TABLE IF NOT EXISTS messages(
+  message_id SERIAL PRIMARY KEY,
+  sender_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  receiver_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  item_id INT REFERENCES items(item_id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""
+    ,
+"""
+CREATE TABLE IF NOT EXISTS favorites(
+  favorite_id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  item_id INT REFERENCES items(item_id) ON DELETE CASCADE,
+  date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, item_id)
+);
+"""
+    ,
+"""
+CREATE TABLE IF NOT EXISTS reviews(
+  review_id SERIAL PRIMARY KEY,
+  reviewer_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  reviewee_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  transaction_id INT REFERENCES transactions(transaction_id) ON DELETE CASCADE,
+  rating INT NOT NULL,
+  comments TEXT,
+  date_of_review TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT rating_check CHECK(rating BETWEEN 1 AND 5)
+);
+"""
+]
+
+index_queries = [
+    "CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);",
+    "CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);",
+    "CREATE INDEX IF NOT EXISTS idx_items_trader_id ON items(trader_id);",
+    "CREATE INDEX IF NOT EXISTS idx_items_category_id ON items(category_id);",
+    "CREATE INDEX IF NOT EXISTS idx_transactions_sender_id ON transactions(sender_id);",
+    "CREATE INDEX IF NOT EXISTS idx_transactions_receiver_id ON transactions(receiver_id);",
+    "CREATE INDEX IF NOT EXISTS idx_messages_sender_id ON messages(sender_id);",
+    "CREATE INDEX IF NOT EXISTS idx_messages_receiver_id ON messages(receiver_id);",
+    "CREATE INDEX IF NOT EXISTS idx_reviews_reviewer_id ON reviews(reviewer_id);",
+    "CREATE INDEX IF NOT EXISTS idx_reviews_reviewee_id ON reviews(reviewee_id);"
+]
+#execute the queries
+try:
+    for query in create_queries:
+        cursor.execute(query)
+    connection.commit()
+    print("Tables create successfully")
+
+    for index in index_queries:
+        cursor.execute(index)
+    connection.commit()
+    print("Indexes created successfully")
+
+except Exception as e:
+    print(f"error creating tables: {e}")
+    connection.rollback()
+finally:
+    #close the connection and cursor
+    cursor.close()
+    connection.close()
