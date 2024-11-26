@@ -1,6 +1,7 @@
 import flet as ft
 from datetime import datetime
 import datetime
+from utils.uniqueID import make_ID,add_ID
 
 class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
@@ -162,7 +163,7 @@ class UserMakePost(ft.Container):
             return
 
         # Process the valid data
-        print("Post saved successfully!")
+        print("Post saved successfully!" + make_ID())
 
 
     def clear_fields(self):
