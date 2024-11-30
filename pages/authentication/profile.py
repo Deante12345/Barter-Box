@@ -1,8 +1,19 @@
 import flet as ft
+from db.queries import get_user_info  # Import the query function
+from db.queries import get_user_by_username
 
 class Profile(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
+
+        # Get the username from the session or from another source (page.session, for example)
+        #username = get_user_by_username("john123")  # Assuming 'username' is stored in the session
+
+        # Fetch the user details using the username
+        #user_info = get_user_info()
+
+        # Default to "Guest" if user is not found
+        # first_name = user_info[1] if user_info else "Guest"
 
         # Navigation Bar
         self.navigation_bar = ft.Row(
@@ -28,7 +39,7 @@ class Profile(ft.Container):
                                 foreground_image_url="https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/4426348.png",
                             ),
                             ft.Text(
-                                "Jaden Daniels", 
+                                 f"Hello!",  # Personalized greeting
                                 size=20, 
                                 weight="bold", 
                                 text_align="center",

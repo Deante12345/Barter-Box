@@ -6,6 +6,10 @@ import bcrypt
 
 
 class Login(ft.Container):
+
+
+
+
     def __init__(self, page: ft.Page):
         super().__init__()
 
@@ -89,6 +93,7 @@ class Login(ft.Container):
             hashed_password = user['password_hash']
             print(f"Retrieved hash: '{hashed_password}'")
             print(f"Length: {len(hashed_password)}")
+            
             if verify_password(password, hashed_password):
                 self.error_field.value = "Login successful!"
                 self.error_field.color = "green"
