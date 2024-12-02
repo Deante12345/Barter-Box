@@ -3,21 +3,21 @@
 ### General Description
 Barter Box is a community-focused trading app that allows users to exchang surplus items, such as groceries or household goods, for points that can be used to acquire other essentials. Designed for individuals, families, and small business owners, Barter Box helps reduce waste and save money by facilitating easy trades within local communities. The app’s user-friendly interface and focus on sustainability make it ideal for anyone looking to declutter, stretch their budget, and support a more environmentally conscious lifestyle.
 
-###Technologies
+### Technologies
 • Python
 • Flet
 • Recommended development environment is Visual Studio
 • PostgreSql
 
-###Target Audience
+### Target Audience
 Barter Box targets families, college students, restaurant owners or anyone else looking for reducing food waste and saving money on unwated food items.
 
-###User Stories
+### User Stories
 • As a dad, I often buy a lot of snacks or food that my family doesn't eat, I want my family to stop wasting food and money that we don't have. 
 • As a Costco shopper, I often find myself buying more groceries than my family can finish, therefore I want to be able to share them with my community and get something in return. 
 • As a party owner I am often left with a lot of open soda and drinks after a party, I don't think a stranger will trust me to give them left over drinks so I need a way to get rid of them. 
 
-###Development Enviroment Setup
+### Development Enviroment Setup
 • Recommended Prerequisites
 - Python 3.8 or higher
 - Recommended development environment is Visual Studio Code
@@ -38,7 +38,7 @@ Barter Box targets families, college students, restaurant owners or anyone else 
 5. Running the application
    - To run the application, in the Visual Studio Code terminal type: flet run
 
-###File Structure
+### File Structure
 • db:
 • pages/authentication: contains the different parts of the app that users interact with
     - checkout.py: 
@@ -50,7 +50,7 @@ Barter Box targets families, college students, restaurant owners or anyone else 
 • main.py: initializes the page, sets up route handling, and dynamically loads the appropriate view based on the current route
 • router.py: manages the navigation and routing of the app, loading different pages such as login, signup, makeuserpost, and checkout based on the current route
 
-###Core Features
+### Core Features
 • Trading Items
     - Users can post any unwanted food
     - Users can pick a point value to get for trading the food item, which can be used for future trades
@@ -61,7 +61,7 @@ Barter Box targets families, college students, restaurant owners or anyone else 
 • User-Friendly Interface:
     - Simple navigation built using Flet, making it accessible to everyone
 
-###Future Goals
+### Future Goals
 • Users will get exta points by watching adds or refering friends
 
-###Video Demo
+### Video Demo
