@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from db.connection import get_connection
+import json
 
 def create_user(first_name, last_name, username, password, email):
    query = """
@@ -31,15 +32,23 @@ def get_user_info(username):
          cursor.execute(query, (username,))
          return cursor.fetchone()
 
-def create_post(poster_id, title, description, quantity, points, zipcode, expiration_date):
+def create_post(poster_id, title, description, quantity, points, zipcode, expiration_date, category_name, image_url ):
    query = """
-    INSERT INTO posts(poster_id, title, description, quantity, points, zipcode, expiration_date, image_url)
-    VALUES(%s, %s, %s, %s, %s, %s, %s) RETURNING poster_id;
+    INSERT INTO posts(poster_id, title, description, quantity, points, zip_code, expiration_date, category_id, images)
+    VALUES(%s, %s, %s, %s, %s, %s, %s,
+   (SELECT category_id FROM categories WHERE category_name = %s), %s::jsonb
+   )
+   RETURNING post_id;
    """
-   with get_connection() as conn:
-      with conn.cursor() as cursor:
-         cursor.execute(query, (poster_id,title, description, quantity, points, zipcode, expiration_date, image_url))
-         return cursor.fetchone()[0]
+   try:
+      images_json = json.dumps(image_url)
+      with get_connection() as conn:
+         with conn.cursor() as cursor:
+            cursor.execute(query, (poster_id,title, description, quantity, points, zipcode, expiration_date, category_name, images_json))
+            return cursor.fetchone()["post_id"]
+   except Exception as ex:
+        print(f"Error in create_post: {str(ex)}")
+        raise
 
 def get_all_posts():
    query = """

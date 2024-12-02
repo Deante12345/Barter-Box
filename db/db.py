@@ -127,19 +127,19 @@ index_queries = [
     "CREATE INDEX IF NOT EXISTS idx_reviews_reviewee_id ON reviews(reviewee_id);"
 ]
 
-alter_queries = [
-"""
-ALTER TABLE posts
-ADD COLUMN category_id INT;
-"""
-    ,
-"""
-ALTER TABLE posts
-ADD CONSTRAINT fk_category
-FOREIGN KEY (category_id) REFERENCES categories(category_id)
-ON DELETE SET NULL;
-"""
-]
+#alter_queries = [
+#"""
+#ALTER TABLE posts
+#ADD COLUMN category_id INT;
+#"""
+#    ,
+#"""
+#ALTER TABLE posts
+#ADD CONSTRAINT fk_category
+#FOREIGN KEY (category_id) REFERENCES categories(category_id)
+#ON DELETE SET NULL;
+#"""
+#]
 #execute the queries
 try:
     for query in create_queries:
@@ -152,10 +152,10 @@ try:
     connection.commit()
     print("Indexes created successfully")
 
-    for alter in alter_queries:
-        cursor.execute(alter)
-    connection.commit()
-    print("Alterations created successfully")
+   # for alter in alter_queries:
+   #     cursor.execute(alter)
+   # connection.commit()
+   # print("Alterations created successfully")
 except Exception as e:
     print(f"error creating tables: {e}")
     connection.rollback()

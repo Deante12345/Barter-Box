@@ -1,6 +1,7 @@
 import flet as ft
 from datetime import datetime
 import datetime
+from db.queries import create_post
 
 class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
@@ -150,9 +151,51 @@ class UserMakePost(ft.Container):
             self.error_field.size = 12
             self.error_field.update()
             return
+         # Extract validated data
+        title = self.title_field.value.strip()
+        description = self.description_field.value.strip()
+        quantity = int(self.quantity_field.value.strip())
+        points = int(self.points_field.value.strip())
+        zipcode = self.zip_field.value.strip()
+        expiration_date = self.expiration_date_field.value.strip()
+        category_name = self.category_dropdown.value.strip()
+        image_url = [image.src for image in self.images]  # Convert images to URLs or paths
 
-        # Process the valid data
-        print("Post saved successfully!")
+        print("Post Data:")
+        print(f"Title: {title}")
+        print(f"Description: {description}")
+        print(f"Quantity: {quantity}")
+        print(f"Points: {points}")
+        print(f"Zipcode: {zipcode}")
+        print(f"Expiration Date: {expiration_date}")
+        print(f"Category: {category_name}")
+        print(f"Image URLs: {image_url}")
+
+        try:
+            poster_id = self.page.session.get("user_id")
+            print(poster_id)
+            post_id = create_post(
+            poster_id, title, description, quantity, points,
+                zipcode, expiration_date, category_name, image_url
+        )
+
+        # Success message
+            self.error_field.value = f"Post saved successfully! Post ID: {post_id}"
+            self.error_field.size = 12
+            self.error_field.color = "green"
+            self.error_field.update()
+
+        # Clear fields after saving
+            self.clear_fields()
+
+        except Exception as ex:
+        # Handle any errors
+            self.error_field.value = f"Error saving post: {str(ex)}"
+            self.error_field.size = 12
+            self.error_field.color = "red"
+            self.error_field.update()
+            # Process the valid data
+            print("Post saved successfully!")
 
     def clear_fields(self):
         """Clears all input fields."""
