@@ -95,6 +95,7 @@ class Login(ft.Container):
 
             if verify_password(password, hashed_password):
                 self.page.session.set("user_id",user['user_id'])
+                self.page.session.set("username",user['username'])
                 #saved_user_id = self.page.session.get("user_id")
                 #print(f"User ID saved to session: {saved_user_id}")
                 self.error_field.value = "Login successful!"
