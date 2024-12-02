@@ -4,48 +4,44 @@ class Home(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
 
-        # Define Alert Dialog
-        self.dlg = ft.AlertDialog(
-            title=ft.Text("Hello, you!"),
-            on_dismiss=lambda e: print("Dialog dismissed!")
-        )
+        self.cart_items = []  # List to store cart items
+        self.total_points = 0  # Total points for items in the cart
+        self.all_items = [f"Item {i}" for i in range(60)]  # List of all items
+        self.filtered_items = self.all_items.copy()  # Initial filtered items are all items
 
-        def close_dlg(e):
-            self.dlg_modal.open = False
-            page.update()
-
+        # Cart dialog
         self.dlg_modal = ft.AlertDialog(
             modal=True,
-            title=ft.Text("My cart"),
-            content=ft.Text("Current cart items(0)"),
+            title=ft.Text("My Cart"),
+            content=ft.Column([]),  # Placeholder for cart items
             actions=[
                 ft.TextButton("Checkout", on_click=lambda e: page.go("/checkout")),
-                ft.TextButton("Back to Shopping", on_click=close_dlg),
+                ft.TextButton("Back to Shopping", on_click=lambda e: self.close_cart_dialog(page)),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
-            on_dismiss=lambda e: print("Modal dialog dismissed!"),
         )
 
-        def open_dlg(e):
+        # Open cart dialog
+        def open_cart_dialog(e):
+            cart_content = ft.Column(
+                controls=[
+                    ft.Text(f"- {item}: 10 points", color="black") for item in self.cart_items
+                ] + [ft.Text(f"Total Points: {self.total_points}", color="black")]
+            )
+            self.dlg_modal.content = cart_content
             page.dialog = self.dlg_modal
             self.dlg_modal.open = True
             page.update()
 
-        def open_dlg_modal(e):
-            page.dialog = self.dlg_modal
-            self.dlg_modal.open = True
-            page.update()
-
-        # Store dialog open function for shopping cart
-        self.open_dlg = open_dlg
+        self.open_cart_dialog = open_cart_dialog
 
         # Navigation Bar
         self.navigation_bar = ft.Row(
             controls=[
                 ft.TextButton(
-                    "Cart $0.00",
+                    "Cart",
                     icon=ft.icons.SHOPPING_CART,
-                    on_click=self.open_dlg,
+                    on_click=self.open_cart_dialog,
                 ),
                 ft.TextButton(
                     "Trade",
@@ -62,24 +58,11 @@ class Home(ft.Container):
             spacing=10,
         )
 
-        # Welcome Banner
-        self.welcome_banner = ft.Container(
-            content=ft.Text(
-                "Welcome to BarterBox! Trade items, reduce waste, and connect with your community.",
-                size=20,
-                weight="bold",
-                color="white",
-            ),
-            padding=10,
-            alignment=ft.alignment.center,
-            bgcolor="blue",
-        )
-
-        # Search Bar
+        # Search Bar with filtering
         self.search_bar = ft.Container(
             content=ft.TextField(
                 label="Search for items...",
-                on_submit=lambda e: page.go(f"/search?query={e.control.value}"),
+                on_submit=self.filter_items,
             ),
             padding=10,
             alignment=ft.alignment.center,
@@ -113,20 +96,97 @@ class Home(ft.Container):
             spacing=10,
         )
 
+        # GridView Section
+        self.images = ft.GridView(
+            expand=1,
+            runs_count=5,
+            max_extent=150,
+            child_aspect_ratio=1.0,
+            spacing=5,
+            run_spacing=5,
+        )
+        self.populate_grid()  # Populate grid with initial items
+
         # Main Content
         self.content = ft.Column(
             controls=[
                 self.navigation_bar,
-                self.welcome_banner,
                 self.search_bar,
                 self.categories_section,
-                ft.Text("Recent Listings:", color="white"),
+                ft.Container(
+                    content=ft.Text("Explore Popular Items:", color="white", size=18),
+                    padding=10,
+                ),
+                self.images,
             ],
             spacing=20,
         )
 
-        # Add main content to the container
         self.content.padding = 20
         self.content.bgcolor = "black"
         self.content.alignment = ft.alignment.center
         self.content.scroll = "auto"
+        self.content.expand = True
+        self.controls = [self.content]
+
+    def populate_grid(self):
+        """Populate the grid with items based on `self.filtered_items`."""
+        self.images.controls.clear()
+        for index, item_name in enumerate(self.filtered_items):
+            image = ft.Image(
+                src=f"https://picsum.photos/150/150?{index}",
+                fit=ft.ImageFit.NONE,
+                repeat=ft.ImageRepeat.NO_REPEAT,
+                border_radius=ft.border_radius.all(10),
+            )
+            self.images.controls.append(
+                ft.GestureDetector(
+                    content=image,
+                    on_tap=lambda e, index=index: self.on_image_click(e, index),
+                )
+            )
+
+    def filter_items(self, e):
+        """Filter items in the grid based on the search query."""
+        query = e.control.value.lower()
+        self.filtered_items = [
+            item for item in self.all_items if query in item.lower()
+        ]
+        self.populate_grid()  # Refresh grid with filtered items
+        e.page.update()
+
+    def on_image_click(self, e, image_index):
+        """Handle item click and show details dialog."""
+        item_name = self.filtered_items[image_index]  # Get the clicked item's name
+        e.page.dialog = ft.AlertDialog(
+            title=ft.Text("Item Details"),
+            content=ft.Text(f"Item Name: {item_name}\nPoints Cost: 10"),
+            actions=[
+                ft.TextButton(
+                    "Add to Cart",
+                    on_click=lambda _: self.add_to_cart(e.page, item_name),
+                ),
+                ft.TextButton("Close", on_click=lambda _: self.close_item_dialog(e.page)),
+            ],
+        )
+        e.page.dialog.open = True
+        e.page.update()
+
+    def add_to_cart(self, page, item_name):
+        """Add an item to the cart."""
+        self.cart_items.append(item_name)
+        self.total_points += 10  # Add 10 points for each item
+        page.snack_bar = ft.SnackBar(ft.Text(f"{item_name} added to cart!"))
+        page.snack_bar.open = True
+        page.dialog.open = False
+        page.update()
+
+    def close_item_dialog(self, page):
+        """Close the item details dialog."""
+        page.dialog.open = False
+        page.update()
+
+    def close_cart_dialog(self, page):
+        """Close the cart dialog."""
+        self.dlg_modal.open = False
+        page.update()
