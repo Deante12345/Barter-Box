@@ -1,19 +1,26 @@
 import flet as ft
 from db.queries import get_user_info  # Import the query function
 from db.queries import get_user_by_username
+from pages.authentication import login
 
 class Profile(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
+        
+        username = page.session.get("username")
+        result = get_user_info(username)
 
-        # Get the username from the session or from another source (page.session, for example)
-        #username = get_user_by_username("john123")  # Assuming 'username' is stored in the session
-
-        # Fetch the user details using the username
-        #user_info = get_user_info()
-
-        # Default to "Guest" if user is not found
-        # first_name = user_info[1] if user_info else "Guest"
+        if result:  # Check if result is not None
+            first_name = result["first_name"]  # Safely access first_name
+            last_name =  result["last_name"]
+            email =  result["email"]
+            balance = result["points_balance"]
+            
+        else:
+            first_name = "error"
+            last_name =  "no name"
+            email = "no email"
+            balance = 0
 
         # Navigation Bar
         self.navigation_bar = ft.Row(
@@ -36,10 +43,16 @@ class Profile(ft.Container):
                             ft.CircleAvatar(
                                 width=150,
                                 height=150,
-                                foreground_image_url="https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/4426348.png",
+                                foreground_image_url="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg",
                             ),
                             ft.Text(
-                                 f"Hello!",  # Personalized greeting
+                                 f"{first_name} {last_name}",  # Personalized greeting
+                                size=20, 
+                                weight="bold", 
+                                text_align="center",
+                            ),
+                            ft.Text(
+                                 f"{email}",  # Personalized greeting
                                 size=20, 
                                 weight="bold", 
                                 text_align="center",
@@ -51,13 +64,13 @@ class Profile(ft.Container):
                                 text_align="center",
                             ),
                             ft.Text(
-                                "Hello, my name is Jaden, and I am happy to make any trades for groceries.\n"
+                                f"Hello, my name is {first_name}, and I am happy to make any trades for groceries.\n"
                                 "I am a part-time chef, so I often have extra ingredients.",
                                 size=14,
                                 text_align="center",
                             ),
                             ft.Text(
-                                "Total Points: ",
+                                f"Total Points: {balance} ",
                                 size=14,
                                 text_align="center",
                             ),
