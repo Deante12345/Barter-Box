@@ -1,19 +1,8 @@
 import flet as ft
-from db.queries import get_user_info  # Import the query function
-from db.queries import get_user_by_username
 
-class Profile(ft.Container):
+class Checkout(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
-
-        # Get the username from the session or from another source (page.session, for example)
-        #username = get_user_by_username("john123")  # Assuming 'username' is stored in the session
-
-        # Fetch the user details using the username
-        #user_info = get_user_info()
-
-        # Default to "Guest" if user is not found
-        # first_name = user_info[1] if user_info else "Guest"
 
         # Navigation Bar
         self.navigation_bar = ft.Row(
@@ -33,36 +22,16 @@ class Profile(ft.Container):
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.CircleAvatar(
-                                width=150,
-                                height=150,
-                                foreground_image_url="https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/4426348.png",
-                            ),
+                            
                             ft.Text(
-                                 f"Hello!",  # Personalized greeting
+                                "My Bag(0)", 
                                 size=20, 
                                 weight="bold", 
                                 text_align="center",
                             ),
-                            ft.Text(
-                                "Baton Rouge, Louisiana", 
-                                size=16, 
-                                color="blue", 
-                                text_align="center",
-                            ),
-                            ft.Text(
-                                "Hello, my name is Jaden, and I am happy to make any trades for groceries.\n"
-                                "I am a part-time chef, so I often have extra ingredients.",
-                                size=14,
-                                text_align="center",
-                            ),
+
                             ft.Text(
                                 "Total Points: ",
-                                size=14,
-                                text_align="center",
-                            ),
-                            ft.Text(
-                                "Rating: 7/10",
                                 size=14,
                                 text_align="center",
                             ),
