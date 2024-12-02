@@ -16,10 +16,10 @@ cursor = connection.cursor()
 
 #table creation
 create_queries = [
-"""
-  CREATE TYPE transaction_status AS ENUM ('Pending', 'Completed', 'Failed');
-"""
-    ,
+#"""
+#  CREATE TYPE transaction_status AS ENUM ('Pending', 'Completed', 'Failed');
+#"""
+ #   ,
 """
 CREATE TABLE IF NOT EXISTS users(
   user_id SERIAL PRIMARY KEY,
@@ -98,6 +98,20 @@ CREATE TABLE IF NOT EXISTS reviews(
   CONSTRAINT rating_check CHECK(rating BETWEEN 1 AND 5)
 );
 """
+    ,
+"""
+CREATE TABLE IF NOT EXISTS posts(
+  post_id SERIAL PRIMARY KEY,
+  poster_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  quantity INT NOT NULL CHECK (quantity > 0),
+  points INT NOT NULL CHECK (points >= 0),
+  zip_code VARCHAR(5) NOT NULL,
+  expiration_date DATE NOT NULL,
+  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""
 ]
 
 index_queries = [
@@ -112,6 +126,13 @@ index_queries = [
     "CREATE INDEX IF NOT EXISTS idx_reviews_reviewer_id ON reviews(reviewer_id);",
     "CREATE INDEX IF NOT EXISTS idx_reviews_reviewee_id ON reviews(reviewee_id);"
 ]
+
+#alter_queries = [
+#"""
+#ALTER TABLE posts
+#ADD COLUMN image_url TEXT;
+#"""
+#]
 #execute the queries
 try:
     for query in create_queries:
@@ -124,6 +145,10 @@ try:
     connection.commit()
     print("Indexes created successfully")
 
+    #for alter in alter_queries:
+     #   cursor.execute(alter)
+    #connection.commit()
+    #print("Alterations created successfully")
 except Exception as e:
     print(f"error creating tables: {e}")
     connection.rollback()
