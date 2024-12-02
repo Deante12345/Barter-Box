@@ -20,3 +20,14 @@ def get_user_by_username(username):
       with conn.cursor() as cursor:
          cursor.execute(query, (username,))
          return cursor.fetchone()
+
+#!/usr/bin/env python3
+def get_user_info(username):
+   query = """
+   SELECT user_id, first_name, last_name, username, email FROM users WHERE username = %s;
+   """
+   with get_connection() as conn:
+      with conn.cursor() as cursor:
+         cursor.execute(query, (username,))
+         return cursor.fetchone()
+

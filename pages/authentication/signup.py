@@ -9,6 +9,12 @@ from db.hash_password import hash_password
 from utils.validation import Validation
 
 class SignUp(ft.Container):
+    
+    
+    
+    
+    
+    
     def __init__(self, page: ft.Page):
         super().__init__()
 
@@ -26,6 +32,9 @@ class SignUp(ft.Container):
         self.username_field = ft.TextField(label="Username", width=300)
         self.password_field = ft.TextField(label="Password", password=True, width=300)
         self.re_password_field = ft.TextField(label="Re-enter Password", password=True, width=300)
+        
+
+   
 
         # Set up the UI layout with fields and a signup button
         self.content = ft.Row(
@@ -72,6 +81,7 @@ class SignUp(ft.Container):
                 ),
             ]
         )
+    
 
     # Method to handle the signup action
     def signup(self, e):
