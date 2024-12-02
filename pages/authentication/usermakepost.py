@@ -40,7 +40,7 @@ class UserMakePost(ft.Container):
         self.expiration_date_field = ft.TextField(
             label="Expiration Date (MM/DD/YYYY)", 
             width=400, 
-            max_length=10,  
+            max_legth=10,  # To ensure the input stays within the required format
         )
 
         # Image Container
