@@ -52,14 +52,14 @@ Barter Box targets families, college students, restaurant owners or anyone else 
 
 ### Core Features
 1. Trading Items
-    • Users can post any unwanted food
-    • Users can pick a point value to get for trading the food item, which can be used for future trades
+    - Users can post any unwanted food
+    - Users can pick a point value to get for trading the food item, which can be used for future trades
 2.  User Account
-    • Secure signup and login system to ensure a personalised experience
+    - Secure signup and login system to ensure a personalised experience
 3. Point System:
-    • A built-in point based trading system that allows users to exchange food without using money
+    - A built-in point based trading system that allows users to exchange food without using money
 4. User-Friendly Interface:
-    • Simple navigation built using Flet, making it accessible to everyone
+    - Simple navigation built using Flet, making it accessible to everyone
 
 ### Future Goals
 • Users will get exta points by watching adds or refering friends
