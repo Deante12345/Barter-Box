@@ -3,6 +3,8 @@ from datetime import datetime
 import datetime
 from db.queries import create_post
 import re
+import requests
+import os
 
 class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
@@ -93,11 +95,45 @@ class UserMakePost(ft.Container):
 
     def process_image_upload(self, e: ft.FilePickerResultEvent):
         if e.files:
-            uploaded_image = ft.Image(src=e.files[0].path, fit=ft.ImageFit.COVER, width=200, height=200,)
-            self.images.append(uploaded_image)
-            self.image_container.controls.append(uploaded_image)
+            file_path = e.files[0].path
+            file_name = os.path.basename(file_path)
+
+             # Create a preview of the image
+            local_image_preview = ft.Image(
+                 src=file_path,
+                 fit=ft.ImageFit.COVER,
+                 width=200,
+                 height=200,
+             )
+
+        # Display the preview in the UI
+            self.images.append(local_image_preview)
+            self.image_container.controls.append(local_image_preview)
             self.image_container.update()
 
+            # Save file path for later upload during post submission
+            # Send the file to the Flask upload API
+            url = "http://127.0.0.1:5000/upload"
+
+            with open(file_path, 'rb') as file:
+                files = {'file': (file_name, file)}
+                response = requests.post(url, files=files)
+
+            if response.status_code == 200:
+                # Get the URL of the uploaded image
+                file_url = response.json().get('url')
+                print(f"Image uploaded successfully. URL: {file_url}")
+
+                # Display the uploaded image in the Flet UI
+               # uploaded_image = ft.Image(src=file_url, fit=ft.ImageFit.COVER, width=200, height=200,)
+                #self.images.append(uploaded_image)
+                #self.image_container.controls.append(uploaded_image)
+                #self.image_container.update()
+            else:
+                # Handle any errors
+                self.error_field.value = f"Error uploading image: {response.text}"
+                self.error_field.color = "red"
+                self.error_field.update()
     # checks if expiration date is valid and if it is after today's date
     def validate_expiration_date(self, date_start):
         try:
