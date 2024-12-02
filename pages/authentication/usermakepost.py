@@ -5,7 +5,7 @@ from db.queries import create_post
 import re
 
 class UserMakePost(ft.Container):
-    def __init__(self, page: ft.Page)::
+    def __init__(self, page: ft.Page):
         super().__init__()
 
         # Initializing variables
