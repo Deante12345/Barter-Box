@@ -4,7 +4,6 @@
 from db.connection import get_connection
 import json
 
-
 def create_user(first_name, last_name, username, password, email):
    query = """
     INSERT INTO users(first_name, last_name, username, password_hash, email)
@@ -25,7 +24,6 @@ def get_user_by_username(username):
          cursor.execute(query, (username,))
          return cursor.fetchone()
 
-#!/usr/bin/env python3
 #!/usr/bin/env python3
 def get_user_info(username):
    query = """
