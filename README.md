@@ -4,10 +4,10 @@
 Barter Box is a community-focused trading app that allows users to exchang surplus items, such as groceries or household goods, for points that can be used to acquire other essentials. Designed for individuals, families, and small business owners, Barter Box helps reduce waste and save money by facilitating easy trades within local communities. The app’s user-friendly interface and focus on sustainability make it ideal for anyone looking to declutter, stretch their budget, and support a more environmentally conscious lifestyle.
 
 ### Technologies
-• Python
-• Flet
-• Recommended development environment is Visual Studio
-• PostgreSql
+- Python
+- Flet
+- Recommended development environment is Visual Studio
+- PostgreSql
 
 ### Target Audience
 Barter Box targets families, college students, restaurant owners or anyone else looking for reducing food waste and saving money on unwated food items.
