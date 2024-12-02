@@ -13,9 +13,9 @@ Barter Box is a community-focused trading app that allows users to exchang surpl
 Barter Box targets families, college students, restaurant owners or anyone else looking for reducing food waste and saving money on unwated food items.
 
 ### User Stories
-• As a dad, I often buy a lot of snacks or food that my family doesn't eat, I want my family to stop wasting food and money that we don't have. 
-• As a Costco shopper, I often find myself buying more groceries than my family can finish, therefore I want to be able to share them with my community and get something in return. 
-• As a party owner I am often left with a lot of open soda and drinks after a party, I don't think a stranger will trust me to give them left over drinks so I need a way to get rid of them. 
+-  As a dad, I often buy a lot of snacks or food that my family doesn't eat, I want my family to stop wasting food and money that we don't have. 
+-  As a Costco shopper, I often find myself buying more groceries than my family can finish, therefore I want to be able to share them with my community and get something in return. 
+-  As a party owner I am often left with a lot of open soda and drinks after a party, I don't think a stranger will trust me to give them left over drinks so I need a way to get rid of them. 
 
 ### Development Enviroment Setup
 • Recommended Prerequisites
