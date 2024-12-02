@@ -22,7 +22,7 @@ class UserMakePost(ft.Container):
             width=400,
         )
         self.quantity_field = ft.TextField(label="Quantity", width=100)
-        self.points_field = ft.TextField(label="Amount of points you want",  width=100)
+        self.points_field = ft.TextField(label="Amount of points you want",  width=150)
         self.zip_field = ft.TextField(label="Zip Code", max_length=5, width=150)
         self.expiration_date_field = ft.TextField(
             label="Expiration Date (MM-DD-YYYY):",
@@ -153,6 +153,8 @@ class UserMakePost(ft.Container):
 
         # Process the valid data
         print("Post saved successfully!")
+        self.page.go("/home")
+
 
     def clear_fields(self):
         """Clears all input fields."""
