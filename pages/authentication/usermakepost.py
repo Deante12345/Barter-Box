@@ -160,7 +160,6 @@ class UserMakePost(ft.Container):
         category_name = self.category_dropdown.value.strip()
         image_url = [image.src for image in self.images]  # Convert images to URLs or paths
 
-<<<<<<< HEAD
         print("Post Data:")
         print(f"Title: {title}")
         print(f"Description: {description}")
