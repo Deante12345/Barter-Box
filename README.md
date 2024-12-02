@@ -39,27 +39,27 @@ Barter Box targets families, college students, restaurant owners or anyone else 
    - To run the application, in the Visual Studio Code terminal type: flet run
 
 ### File Structure
-• db:
-• pages/authentication: contains the different parts of the app that users interact with
+1. db:
+2. pages/authentication: contains the different parts of the app that users interact with
     - checkout.py: 
     - home.py: homepage where users can select to trade items, go to cart, go to profie as well as see other items up for trade
     - login.py: this page allows users to log into their account using their username and password
     - profile.py:  
     - signup.py: this page allows users to make an account using their first and last name, email, and a password 
     - usermakepost.py: this page allows users to post their unwanted food items up for trade
-• main.py: initializes the page, sets up route handling, and dynamically loads the appropriate view based on the current route
-• router.py: manages the navigation and routing of the app, loading different pages such as login, signup, makeuserpost, and checkout based on the current route
+3. main.py: initializes the page, sets up route handling, and dynamically loads the appropriate view based on the current route
+4. router.py: manages the navigation and routing of the app, loading different pages such as login, signup, makeuserpost, and checkout based on the current route
 
 ### Core Features
-• Trading Items
-    - Users can post any unwanted food
-    - Users can pick a point value to get for trading the food item, which can be used for future trades
-• User Account
-    - Secure signup and login system to ensure a personalised experience
-• Point System:
-    - A built-in point based trading system that allows users to exchange food without using money
-• User-Friendly Interface:
-    - Simple navigation built using Flet, making it accessible to everyone
+1. Trading Items
+    • Users can post any unwanted food
+    • Users can pick a point value to get for trading the food item, which can be used for future trades
+2.  User Account
+    • Secure signup and login system to ensure a personalised experience
+3. Point System:
+    • A built-in point based trading system that allows users to exchange food without using money
+4. User-Friendly Interface:
+    • Simple navigation built using Flet, making it accessible to everyone
 
 ### Future Goals
 • Users will get exta points by watching adds or refering friends
