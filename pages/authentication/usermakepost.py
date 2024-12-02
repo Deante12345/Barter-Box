@@ -254,6 +254,7 @@ class UserMakePost(ft.Container):
         print("Post saved successfully!")
         self.page.go("/home")
 
+
     def clear_fields(self):
         """Clears all input fields."""
         self.title_field.value = ""

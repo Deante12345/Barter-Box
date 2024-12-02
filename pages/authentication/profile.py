@@ -7,7 +7,6 @@ class Profile(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
         
-       
         username = page.session.get("username")
         result = get_user_info(username)
 
