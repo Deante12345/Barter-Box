@@ -2,6 +2,7 @@ import flet as ft
 from datetime import datetime
 import datetime
 from db.queries import create_post
+import re
 
 class UserMakePost(ft.Container):
     def __init__(self, page: ft.Page):
@@ -23,7 +24,7 @@ class UserMakePost(ft.Container):
             width=400,
         )
         self.quantity_field = ft.TextField(label="Quantity", width=100)
-        self.points_field = ft.TextField(label="Amount of points you want",  width=100)
+        self.points_field = ft.TextField(label="Amount of points you want",  width=150)
         self.zip_field = ft.TextField(label="Zip Code", max_length=5, width=150)
         self.expiration_date_field = ft.TextField(
             label="Expiration Date (MM-DD-YYYY):",
@@ -64,10 +65,8 @@ class UserMakePost(ft.Container):
                     on_click=self.save_post,
                     style=ft.ButtonStyle(
                         bgcolor=ft.colors.BLUE,
-                        
                     ),
                 ),
-               
             ],
             scroll=ft.ScrollMode.AUTO,
         )
@@ -75,7 +74,7 @@ class UserMakePost(ft.Container):
     # making the container for the images so they can be uploaded
     def create_image_container(self):
         return ft.Row(
-            controls=[
+            controls=[ 
                 ft.Container(
                     content=ft.Icon(ft.icons.ADD_A_PHOTO),
                     on_click=self.add_image,
@@ -161,6 +160,7 @@ class UserMakePost(ft.Container):
         category_name = self.category_dropdown.value.strip()
         image_url = [image.src for image in self.images]  # Convert images to URLs or paths
 
+<<<<<<< HEAD
         print("Post Data:")
         print(f"Title: {title}")
         print(f"Description: {description}")
@@ -196,6 +196,9 @@ class UserMakePost(ft.Container):
             self.error_field.update()
             # Process the valid data
             print("Post saved successfully!")
+        # Process the valid data
+        print("Post saved successfully!")
+        self.page.go("/home")
 
     def clear_fields(self):
         """Clears all input fields."""
