@@ -38,9 +38,26 @@ class Home(ft.Container):
         # Navigation Bar
         self.navigation_bar = ft.Row(
             controls=[
-                ft.TextButton("Cart", icon=ft.icons.SHOPPING_CART, on_click=self.open_cart_dialog),
-                ft.TextButton("Trade", on_click=lambda e: page.go("/usermakepost"), icon=ft.icons.SWAP_HORIZ_ROUNDED),
-                ft.TextButton("Profile", on_click=lambda e: page.go("/profile"), icon=ft.icons.PERSON),
+                ft.TextButton(
+                    "Cart",
+                    icon=ft.icons.SHOPPING_CART,
+                    on_click=self.open_cart_dialog,
+                ),
+                ft.TextButton(
+                    "Trade",
+                    on_click=lambda e: page.go("/usermakepost"),
+                    icon=ft.icons.SWAP_HORIZ_ROUNDED,
+                ),
+                 ft.TextButton(
+                    "Confirm Trade",
+                    on_click=lambda e: page.go("/confirmation"),
+                    icon=ft.icons.STAR,
+                ),
+                ft.TextButton(
+                    "Profile",
+                    on_click=lambda e: page.go("/profile"),
+                    icon=ft.icons.PERSON,
+                ),
             ],
             alignment=ft.MainAxisAlignment.END,
             spacing=10,

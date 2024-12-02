@@ -24,9 +24,11 @@ def get_user_by_username(username):
          cursor.execute(query, (username,))
          return cursor.fetchone()
 
+
 #!/usr/bin/env python3
 def get_user_info(username):
    query = """
+   SELECT  first_name, last_name, email, points_balance FROM users WHERE username = %s;
    SELECT  first_name, last_name, email, points_balance FROM users WHERE username = %s;
    """
    with get_connection() as conn:
