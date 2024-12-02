@@ -48,6 +48,11 @@ class Home(ft.Container):
                     on_click=lambda e: page.go("/usermakepost"),
                     icon=ft.icons.SWAP_HORIZ_ROUNDED,
                 ),
+                 ft.TextButton(
+                    "Confirm Trade",
+                    on_click=lambda e: page.go("/confirmation"),
+                    icon=ft.icons.STAR,
+                ),
                 ft.TextButton(
                     "Profile",
                     on_click=lambda e: page.go("/profile"),
