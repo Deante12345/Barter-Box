@@ -29,7 +29,6 @@ def get_user_by_username(username):
 def get_user_info(username):
    query = """
    SELECT  first_name, last_name, email, points_balance FROM users WHERE username = %s;
-   SELECT  first_name, last_name, email, points_balance FROM users WHERE username = %s;
    """
    with get_connection() as conn:
       with conn.cursor() as cursor:
