@@ -46,7 +46,7 @@ Barter Box targets families, college students, restaurant owners or anyone else 
     - dairy_products.py: lists and sorts food within that specific category
     - frozen_food.py: lists that specific category
     - fresh_produce_page.py: lists food within that specific category
-    - meat_pultry.py:lists food within that specific category
+    - meat_pultry.py: lists food within that specific category
     - home.py: homepage where users can select to trade items, go to cart, go to profie as well as see other items up for trade
     - login.py: this page allows users to log into their account using their username and password
     - profile.py: this page allows users to have their own profile
