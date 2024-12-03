@@ -73,7 +73,7 @@ Barter Box targets families, college students, restaurant owners or anyone else 
     - Stores user accounts, item details, and transaction history securely
 
 ### Future Goals
-• Users will get exta points by watching adds or refering friends
-• Enabling direct communication between users
+- Users will get exta points by watching adds or refering friends
+- Enabling direct communication between users
 
 ### Video Demo
