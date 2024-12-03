@@ -33,8 +33,8 @@ Barter Box targets families, college students, restaurant owners or anyone else 
    - Open a terminal in Visual Studio Code and run: pip install flet
 4. Clone the Repository
    - Open a terminal or command prompt and run: 
-     git clone https://github.com/Deante12345/Barter-Box.git
-     cd Barter-Box
+     - git clone https://github.com/Deante12345/Barter-Box.git
+     - cd Barter-Box
 5. Running the application
    - To run the application, in the Visual Studio Code terminal type: flet run
 
