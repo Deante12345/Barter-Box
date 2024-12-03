@@ -78,7 +78,7 @@ class Home(ft.Container):
             controls=[
                 ft.ElevatedButton(
                     text="Fresh Produce",
-                    on_click=lambda e: self.go_to_fresh_produce(page),  # Calls the method to navigate to FreshProducePage
+                    on_click=lambda e: page.go("/fresh_produce_page"),  # Calls the method to navigate to FreshProducePage
                     style=ft.ButtonStyle(bgcolor=ft.colors.GREEN),
                 ),
                 ft.ElevatedButton(

@@ -7,6 +7,7 @@ from pages.authentication.profile import Profile
 from pages.authentication.usermakepost import UserMakePost
 from pages.authentication.checkout import Checkout
 from pages.authentication.confirmation import Confirmation 
+from pages.authentication.fresh_produce_page import FreshProducePage
 
 
 
@@ -33,5 +34,8 @@ def views_handler (page):
         ]),
         "/confirmation": ft.View(route="/confirmation", controls=[
             Confirmation(page, item_id="111111")]),
+        "/fresh_produce_page": ft.View( route="/fresh_produce_page", controls=[
+                FreshProducePage(page)
+        ]),
         
     }
