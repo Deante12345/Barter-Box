@@ -39,7 +39,7 @@ Barter Box targets families, college students, restaurant owners or anyone else 
    - To run the application, in the Visual Studio Code terminal type: flet run
 
 ### File Structure
-1. db: contains files realted to the database
+1. db: contains files realted to the database, stores user accounts, item details, and transaction history securely
 2. pages/authentication: contains the different parts of the app that users interact with
     - checkout.py: is a shopping cart and contains the items the user wants to get from trading
     - confirmation.py: allows users to confirm or reject a trade incase they chnaged their mind
@@ -61,10 +61,16 @@ Barter Box targets families, college students, restaurant owners or anyone else 
     - Users can pick a point value to get for trading the food item, which can be used for future trades
 2.  User Account
     - Secure signup and login system to ensure a personalised experience
-3. Point System:
+3. Point System
     - A built-in point based trading system that allows users to exchange food without using money
-4. User-Friendly Interface:
+4. User-Friendly Interface
     - Simple navigation built using Flet, making it accessible to everyone
+5. Search Bar
+    - Users can search for items by name or description
+6. Category-Based Filtering
+    - Users can view items based on specific categories
+7. SQLite Database
+    - Stores user accounts, item details, and transaction history securely
 
 ### Future Goals
 • Users will get exta points by watching adds or refering friends
