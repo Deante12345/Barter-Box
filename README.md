@@ -39,12 +39,12 @@ Barter Box targets families, college students, restaurant owners or anyone else 
    - To run the application, in the Visual Studio Code terminal type: flet run
 
 ### File Structure
-1. db:
+1. db: contains files realted to the database
 2. pages/authentication: contains the different parts of the app that users interact with
-    - checkout.py: 
+    - checkout.py: is a shopping cart and contains the items the user wants to get from trading
     - home.py: homepage where users can select to trade items, go to cart, go to profie as well as see other items up for trade
     - login.py: this page allows users to log into their account using their username and password
-    - profile.py:  
+    - profile.py: this page allows users to have their own profile
     - signup.py: this page allows users to make an account using their first and last name, email, and a password 
     - usermakepost.py: this page allows users to post their unwanted food items up for trade
 3. main.py: initializes the page, sets up route handling, and dynamically loads the appropriate view based on the current route

@@ -1,4 +1,5 @@
 import flet as ft
+from pages.authentication import home
 
 class FreshProducePage(ft.Container):
     def __init__(self, page: ft.Page):
@@ -64,11 +65,11 @@ class FreshProducePage(ft.Container):
         e.page.dialog.open = True
         e.page.update()
 
-    def add_to_cart(self, page, item, page_ref):
-        """Add item to the cart and update points."""
-        self.cart_items.append(item)
-        self.total_points += 10  # Add points for each item
-        page.snack_bar = ft.SnackBar(ft.Text(f"{item} added to cart!"))
+    def add_to_cart(self, page, item_name):
+        """Add an item to the cart."""
+        self.cart_items.append(item_name)
+        self.total_points += 10  # Add 10 points for each item
+        page.snack_bar = ft.SnackBar(ft.Text(f"{item_name} added to cart!"))
         page.snack_bar.open = True
         page.dialog.open = False
         page.update()
