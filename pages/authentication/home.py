@@ -1,4 +1,5 @@
 import flet as ft
+from db.queries import get_all_items
 
 class Home(ft.Container):
     def __init__(self, page: ft.Page):
@@ -6,8 +7,15 @@ class Home(ft.Container):
 
         self.cart_items = []  # List to store cart items
         self.total_points = 0  # Total points for items in the cart
-        self.all_items = [f"Item {i}" for i in range(60)]  # List of all items
-        self.filtered_items = self.all_items.copy()  # Initial filtered items are all items
+        self.all_items = []  # List of all items fetched from the database
+        self.filtered_items = []  # Filtered items based on search query
+
+        # Fetch items from the database
+        try:
+            self.all_items = get_all_items()  # Fetch all items from the database
+            self.filtered_items = self.all_items.copy()  # Initialize filtered items
+        except Exception as e:
+            print(f"Error fetching items: {e}")
 
         # Cart dialog
         self.dlg_modal = ft.AlertDialog(
@@ -25,7 +33,8 @@ class Home(ft.Container):
         def open_cart_dialog(e):
             cart_content = ft.Column(
                 controls=[
-                    ft.Text(f"- {item}: 10 points", color="black") for item in self.cart_items
+                    ft.Text(f"- {item['item_name']}: {item['points_value']} points", color="black") 
+                    for item in self.cart_items
                 ] + [ft.Text(f"Total Points: {self.total_points}", color="black")]
             )
             self.dlg_modal.content = cart_content
@@ -48,7 +57,7 @@ class Home(ft.Container):
                     on_click=lambda e: page.go("/usermakepost"),
                     icon=ft.icons.SWAP_HORIZ_ROUNDED,
                 ),
-                 ft.TextButton(
+                ft.TextButton(
                     "Confirm Trade",
                     on_click=lambda e: page.go("/confirmation"),
                     icon=ft.icons.STAR,
@@ -78,7 +87,7 @@ class Home(ft.Container):
             controls=[
                 ft.ElevatedButton(
                     text="Fresh Produce",
-                    on_click=lambda e: page.go("/fresh_produce_page"),                   
+                    on_click=lambda e: page.go("/fresh_produce_page"),
                     style=ft.ButtonStyle(bgcolor=ft.colors.GREEN),
                 ),
                 ft.ElevatedButton(
@@ -110,7 +119,7 @@ class Home(ft.Container):
             spacing=5,
             run_spacing=5,
         )
-        self.populate_grid()  # Populate grid with initial items
+        self.populate_grid()  # Populate grid with items from the database
 
         # Main Content
         self.content = ft.Column(
@@ -137,17 +146,17 @@ class Home(ft.Container):
     def populate_grid(self):
         """Populate the grid with items based on `self.filtered_items`."""
         self.images.controls.clear()
-        for index, item_name in enumerate(self.filtered_items):
+        for item in self.filtered_items:
             image = ft.Image(
-                src=f"https://picsum.photos/150/150?{index}",
-                fit=ft.ImageFit.NONE,
+                src=item["image_path"],
+                fit=ft.ImageFit.COVER,
                 repeat=ft.ImageRepeat.NO_REPEAT,
                 border_radius=ft.border_radius.all(10),
             )
             self.images.controls.append(
                 ft.GestureDetector(
                     content=image,
-                    on_tap=lambda e, index=index: self.on_image_click(e, index),
+                    on_tap=lambda e, item=item: self.on_image_click(e, item),
                 )
             )
 
@@ -155,21 +164,20 @@ class Home(ft.Container):
         """Filter items in the grid based on the search query."""
         query = e.control.value.lower()
         self.filtered_items = [
-            item for item in self.all_items if query in item.lower()
+            item for item in self.all_items if query in item["item_name"].lower()
         ]
         self.populate_grid()  # Refresh grid with filtered items
         e.page.update()
 
-    def on_image_click(self, e, image_index):
+    def on_image_click(self, e, item):
         """Handle item click and show details dialog."""
-        item_name = self.filtered_items[image_index]  # Get the clicked item's name
         e.page.dialog = ft.AlertDialog(
             title=ft.Text("Item Details"),
-            content=ft.Text(f"Item Name: {item_name}\nPoints Cost: 10"),
+            content=ft.Text(f"Item Name: {item['item_name']}\nPoints Cost: {item['points_value']}\nDescription: {item['description']}"),
             actions=[
                 ft.TextButton(
                     "Add to Cart",
-                    on_click=lambda _: self.add_to_cart(e.page, item_name),
+                    on_click=lambda _: self.add_to_cart(e.page, item),
                 ),
                 ft.TextButton("Close", on_click=lambda _: self.close_item_dialog(e.page)),
             ],
@@ -177,11 +185,11 @@ class Home(ft.Container):
         e.page.dialog.open = True
         e.page.update()
 
-    def add_to_cart(self, page, item_name):
+    def add_to_cart(self, page, item):
         """Add an item to the cart."""
-        self.cart_items.append(item_name)
-        self.total_points += 10  # Add 10 points for each item
-        page.snack_bar = ft.SnackBar(ft.Text(f"{item_name} added to cart!"))
+        self.cart_items.append(item)
+        self.total_points += item["points_value"]  # Add points value of the item
+        page.snack_bar = ft.SnackBar(ft.Text(f"{item['item_name']} added to cart!"))
         page.snack_bar.open = True
         page.dialog.open = False
         page.update()

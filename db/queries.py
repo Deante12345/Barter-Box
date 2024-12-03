@@ -5,15 +5,16 @@ from db.connection import get_connection
 import json
 
 def create_user(first_name, last_name, username, password, email):
-   query = """
-    INSERT INTO users(first_name, last_name, username, password_hash, email)
-    VALUES (%s, %s, %s, %s, %s) RETURNING user_id;
-   """
-   with get_connection() as conn:
-       with conn.cursor() as cursor:
-           cursor.execute(query, (first_name, last_name, username,
-                                  password, email))
-           return cursor.fetchone()["user_id"]
+    query = """
+    INSERT INTO users(first_name, last_name, username, password_hash, email, points_balance)
+    VALUES (%s, %s, %s, %s, %s, 100) RETURNING user_id;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(query, (first_name, last_name, username, password, email))
+            return cursor.fetchone()["user_id"]
+
+
 
 def get_user_by_username(username):
    query = """
@@ -70,3 +71,26 @@ def get_post_by_user(user_id):
       with conn.cursor as cursor:
          cursor.execute(query)
          return cursor.fetchall()
+      
+def reset_points_balance():
+    query = """
+    UPDATE users
+    SET points_balance = 100;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            conn.commit()  # Commit the changes to the database
+            print("All users' points_balance have been reset to 100.")
+
+def get_all_items():
+    query = """
+    SELECT 
+        item_id, trader_id, item_name, description, image_path, points_value,
+        category_id, date_listed, is_featured, views_count
+    FROM items;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            return cursor.fetchall()
