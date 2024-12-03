@@ -1,6 +1,5 @@
 import flet as ft
 
-
 class Home(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
@@ -25,8 +24,9 @@ class Home(ft.Container):
         # Open cart dialog
         def open_cart_dialog(e):
             cart_content = ft.Column(
-                controls=[ft.Text(f"- {item}: 10 points", color="black") for item in self.cart_items] +
-                          [ft.Text(f"Total Points: {self.total_points}", color="black")]
+                controls=[
+                    ft.Text(f"- {item}: 10 points", color="black") for item in self.cart_items
+                ] + [ft.Text(f"Total Points: {self.total_points}", color="black")]
             )
             self.dlg_modal.content = cart_content
             page.dialog = self.dlg_modal
@@ -78,7 +78,7 @@ class Home(ft.Container):
             controls=[
                 ft.ElevatedButton(
                     text="Fresh Produce",
-                    on_click=lambda e: self.go_to_fresh_produce(page),  # Calls the method to navigate to FreshProducePage
+                    on_click=lambda e: page.go("/category/food"),
                     style=ft.ButtonStyle(bgcolor=ft.colors.GREEN),
                 ),
                 ft.ElevatedButton(
@@ -118,7 +118,10 @@ class Home(ft.Container):
                 self.navigation_bar,
                 self.search_bar,
                 self.categories_section,
-                ft.Container(content=ft.Text("Explore Popular Items:", color="white", size=18), padding=10),
+                ft.Container(
+                    content=ft.Text("Explore Popular Items:", color="white", size=18),
+                    padding=10,
+                ),
                 self.images,
             ],
             spacing=20,
@@ -142,13 +145,18 @@ class Home(ft.Container):
                 border_radius=ft.border_radius.all(10),
             )
             self.images.controls.append(
-                ft.GestureDetector(content=image, on_tap=lambda e, index=index: self.on_image_click(e, index))
+                ft.GestureDetector(
+                    content=image,
+                    on_tap=lambda e, index=index: self.on_image_click(e, index),
+                )
             )
 
     def filter_items(self, e):
         """Filter items in the grid based on the search query."""
         query = e.control.value.lower()
-        self.filtered_items = [item for item in self.all_items if query in item.lower()]
+        self.filtered_items = [
+            item for item in self.all_items if query in item.lower()
+        ]
         self.populate_grid()  # Refresh grid with filtered items
         e.page.update()
 
@@ -159,7 +167,10 @@ class Home(ft.Container):
             title=ft.Text("Item Details"),
             content=ft.Text(f"Item Name: {item_name}\nPoints Cost: 10"),
             actions=[
-                ft.TextButton("Add to Cart", on_click=lambda _: self.add_to_cart(e.page, item_name)),
+                ft.TextButton(
+                    "Add to Cart",
+                    on_click=lambda _: self.add_to_cart(e.page, item_name),
+                ),
                 ft.TextButton("Close", on_click=lambda _: self.close_item_dialog(e.page)),
             ],
         )
@@ -184,7 +195,3 @@ class Home(ft.Container):
         """Close the cart dialog."""
         self.dlg_modal.open = False
         page.update()
-
-    def go_to_fresh_produce(self, page):
-        """Navigate to the Fresh Produce page."""
-        page.go("/freshproduce")  # Navigate to the Fresh Produce page using page.go()

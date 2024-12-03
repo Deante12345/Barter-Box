@@ -206,8 +206,8 @@ class UserMakePost(ft.Container):
 
     def add_image(self, e):
         if len(self.images) <= 4:
-        if len(self.images) <= 4:
-            self.file_picker.pick_files()
+            if len(self.images) <= 4:
+             self.file_picker.pick_files()
 
     def process_image_upload(self, e: ft.FilePickerResultEvent):
         if e.files:
