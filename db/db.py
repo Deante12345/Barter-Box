@@ -112,6 +112,17 @@ CREATE TABLE IF NOT EXISTS posts(
   date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 """
+    ,
+"""
+CREATE TABLE IF NOT EXISTS cart(
+  cart_id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  post_id INT REFERENCES posts(post_id) ON DELETE CASCADE,
+  quantity INT NOT NULL DEFAULT 1,
+  date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, post_id)
+);
+"""
 ]
 
 index_queries = [
