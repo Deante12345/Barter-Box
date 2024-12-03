@@ -8,6 +8,9 @@ from pages.authentication.usermakepost import UserMakePost
 from pages.authentication.checkout import Checkout
 from pages.authentication.confirmation import Confirmation 
 from pages.authentication.fresh_produce_page import FreshProducePage
+from pages.authentication.frozen_food import FrozenFood
+from pages.authentication.dairy_products import DairyProducts
+from pages.authentication.meat_poultry import MeatPoultry
 
 
 
@@ -34,9 +37,19 @@ def views_handler (page):
         ]),
         "/confirmation": ft.View(route="/confirmation", controls=[
             Confirmation(page, item_id="111111")]),
+        
         "/fresh_produce_page": ft.View( route="/fresh_produce_page", controls=[
                 FreshProducePage(page)
         ]),
-        
+        "/frozen_food": ft.View( route="/frozen_food", controls=[
+                FrozenFood(page)
+        ]),
+        "/dairy_products": ft.View( route="/dairy_products", controls=[
+                DairyProducts(page)
+        ]),
+        "/meat_poultry": ft.View( route="/meat_poultry", controls=[
+                MeatPoultry(page)
+        ]),
+
         
     }

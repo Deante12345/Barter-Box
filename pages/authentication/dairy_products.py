@@ -1,6 +1,6 @@
 import flet as ft
 
-class FreshProducePage(ft.Container):
+class DairyProducts(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
 
@@ -42,7 +42,7 @@ class FreshProducePage(ft.Container):
         self.content = ft.Column(
             controls=[
                 self.navigation_bar,
-                ft.Text("Fresh Produce", size=24, weight="bold"),
+                ft.Text("Dairy Products", size=24, weight="bold"),
                 item_list,
             ],
             spacing=20,

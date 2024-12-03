@@ -83,17 +83,17 @@ class Home(ft.Container):
                 ),
                 ft.ElevatedButton(
                     text="Frozen Foods",
-                    on_click=lambda e: page.go("/category/food"),
+                    on_click=lambda e: page.go("/frozen_food"),
                     style=ft.ButtonStyle(bgcolor=ft.colors.ORANGE),
                 ),
                 ft.ElevatedButton(
                     text="Dairy Products",
-                    on_click=lambda e: page.go("/category/food"),
+                    on_click=lambda e: page.go("/dairy_products"),
                     style=ft.ButtonStyle(bgcolor=ft.colors.BLUE),
                 ),
                 ft.ElevatedButton(
                     text="Meat and Poultry",
-                    on_click=lambda e: page.go("/category/food"),
+                    on_click=lambda e: page.go("/meat_poultry"),
                     style=ft.ButtonStyle(bgcolor=ft.colors.PINK),
                 ),
             ],
@@ -135,7 +135,7 @@ class Home(ft.Container):
         self.controls = [self.content]
 
     def populate_grid(self):
-        """Populate the grid with items based on `self.filtered_items`."""
+        """Populate the grid with items based on self.filtered_items."""
         self.images.controls.clear()
         for index, item_name in enumerate(self.filtered_items):
             image = ft.Image(
