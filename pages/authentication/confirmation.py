@@ -36,6 +36,7 @@ class Confirmation(ft.Container):
         self.status_text.value = "Confirmed 😊"
         self.status_text.color = ft.colors.GREEN
         self.status_text.update()
+        self.page.go("/home")
 
     def reject_trade(self, e):
         self.status_text.value = "Rejected 😞"

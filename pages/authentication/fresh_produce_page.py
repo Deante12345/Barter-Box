@@ -13,11 +13,11 @@ class FreshProducePage(ft.Container):
                 ft.TextButton(
                     "Cart",
                     icon=ft.icons.SHOPPING_CART,
-                    on_click=lambda e: page.go("/cart"),
+                    on_click=lambda e: page.go("/checkout"),
                 ),
                 ft.TextButton(
                     "Home",
-                    on_click=lambda e: page.go("/"),
+                    on_click=lambda e: page.go("/home"),
                     icon=ft.icons.HOME,
                 ),
             ],
